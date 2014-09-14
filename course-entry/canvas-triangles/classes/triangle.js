@@ -8,12 +8,12 @@ function Triangle (ctxHandle, pointA, pointB, pointC, colorHex) {
 }
 
 Triangle.prototype.draw = function() {
-    ctx.beginPath();
-    ctx.moveTo(a.x,a.y);
-    ctx.lineTo(b.x,b.y);
-    ctx.lineTo(c.x,c.y);
-    ctx.fillStyle(this.color);
-    ctx.fill();
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.a.x,this.a.y);
+    this.ctx.lineTo(this.b.x,this.b.y);
+    this.ctx.lineTo(this.c.x,this.c.y);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
 };
 
 module.exports = Triangle;
