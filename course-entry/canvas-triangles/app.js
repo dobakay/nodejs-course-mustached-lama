@@ -28,6 +28,7 @@ var app = (function() {
         return rawExport;
     }
 
+    // TODO: rewrite this to use the history array stored in localStorage
     function loadLastEditedCanvas () {
         var trianglesRaw = localStorage.getItem('triangles');
         trianglesRaw = JSON.parse(trianglesRaw);
