@@ -13,16 +13,29 @@ var app = (function() {
     function buildTriangleObjectsFromRaw (trianglesArrayRaw) {
         var currentTriangle = null;
         for (var i = 0; i < trianglesArrayRaw.length; i++) {
-            currentTriangle = new Triangle(ctx, trianglesArrayRaw[i].pointA,
-                                            trianglesArrayRaw[i].pointB, trianglesArrayRaw[i].pointC,
-                                            trianglesArrayRaw[i].color );
+            currentTriangle = new Triangle(ctx, trianglesArrayRaw[i].a,
+                                            trianglesArrayRaw[i].b, trianglesArrayRaw[i].c,
+                                            trianglesArrayRaw[i].triangleColor );
             canvasTriangles.push(currentTriangle);
         };
     }
 
-    function loadTrianglesFromLocalStorage () {
+    function exportTriangleObjectsToRaw () {
+        var rawExport = [];
+        for (var i = 0; i < canvasTriangles.length; i++) {
+            rawExport.push(canvasTriangles[i].toRaw());
+        };
+        return rawExport;
+    }
+
+    function loadLastEditedCanvas () {
         var trianglesRaw = localStorage.getItem('triangles');
         trianglesRaw = JSON.parse(trianglesRaw);
+        return trianglesRaw;
+    }
+
+    function loadTrianglesFromLocalStorage () {
+        var trianglesRaw = loadLastEditedCanvas();
 
         //building actual Triangle Objects from raw localStorage data
         if(trianglesRaw !== null){
@@ -37,7 +50,28 @@ var app = (function() {
     }
 
     function clearCanvas(){
+        //clearing progress (visual and objects)
+        canvasTriangles = [];
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function loadCanvasHistoryFromLocalStorage () {
+        var history = localStorage.getItem('history');
+        history = JSON.parse(history);
+        return history;
+    }
+
+    function saveCanvas() {
+        savedCanvasHistory = loadCanvasHistoryFromLocalStorage();
+        if(savedCanvasHistory === null) {
+            savedCanvasHistory = [];
+        }
+        // TODO: add field for title that should be entered from user
+        savedCanvasHistory.push({
+            triangles: exportTriangleObjectsToRaw(),
+            timeStamp: new Date(Date.now())
+        });
+        localStorage.setItem('history',JSON.stringify(savedCanvasHistory));
     }
 
     function canvasInit () {
@@ -67,7 +101,7 @@ var app = (function() {
                 var colorInput = document.getElementById('color-picker'),
                     newCanvasTriangle = new Triangle(ctx, lastRecordedCanvasPoints[0],
                                                     lastRecordedCanvasPoints[1], lastRecordedCanvasPoints[2],
-                                                    colorInput.value);
+                                                    colorInput.value.toString());
                 canvasTriangles.push(newCanvasTriangle);
                 newCanvasTriangle.draw();
             }
@@ -79,6 +113,11 @@ var app = (function() {
         doc.getElementById('clear-canvas')
             .addEventListener('click', function (e) {
                 clearCanvas();
+            });
+
+        doc.getElementById('save-canvas')
+            .addEventListener('click', function (e) {
+                saveCanvas();
             });
     }
 
