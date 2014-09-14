@@ -1,7 +1,4 @@
 Triangle = require('./classes/triangle');
-// saving all drawn triangles
-// user with three clicks should make a coloured triangle
-// use input='color' for the triangle fillings
 
 var app = (function() {
     'use strict';
