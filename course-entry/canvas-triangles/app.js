@@ -30,17 +30,13 @@ var app = (function() {
 
     // TODO: rewrite this to use the history array stored in localStorage
     function loadLastEditedCanvas () {
-        var trianglesRaw = localStorage.getItem('triangles');
-        trianglesRaw = JSON.parse(trianglesRaw);
-        return trianglesRaw;
-    }
+        var history = loadCanvasHistoryFromLocalStorage(),
+            lastEditedCanvas = {};
 
-    function loadTrianglesFromLocalStorage () {
-        var trianglesRaw = loadLastEditedCanvas();
-
-        //building actual Triangle Objects from raw localStorage data
-        if(trianglesRaw !== null){
-            buildTriangleObjectsFromRaw(trianglesRaw);
+        if(history !== null) {
+            lastEditedCanvas = history[history.length-1];
+            buildTriangleObjectsFromRaw(lastEditedCanvas.triangles);
+            drawCanvasTriangles();
         }
     }
 
@@ -62,15 +58,15 @@ var app = (function() {
         return history;
     }
 
-    function saveCanvas() {
+    function saveCanvas(canvasName) {
         savedCanvasHistory = loadCanvasHistoryFromLocalStorage();
         if(savedCanvasHistory === null) {
             savedCanvasHistory = [];
         }
-        // TODO: add field for title that should be entered from user
         savedCanvasHistory.push({
             triangles: exportTriangleObjectsToRaw(),
-            timeStamp: new Date(Date.now())
+            timeStamp: new Date(Date.now()),
+            name: canvasName
         });
         localStorage.setItem('history',JSON.stringify(savedCanvasHistory));
     }
@@ -78,7 +74,6 @@ var app = (function() {
     function canvasInit () {
         canvas = document.getElementById('triangles-canvas');
         ctx = canvas.getContext('2d');
-        console.log(ctx);
     }
 
     function getMousePos(canvas, evt) {
@@ -118,14 +113,21 @@ var app = (function() {
 
         doc.getElementById('save-canvas')
             .addEventListener('click', function (e) {
-                saveCanvas();
+                var canvasName = doc.getElementById('canvas-name'),
+                    name = canvasName.value;
+                if(name === '') {
+                    alert('Please enter a name for the canvas you want to save.');
+                }
+                else {
+                    saveCanvas(name);
+                    canvasName.value = '';
+                }
             });
     }
 
     appModule.init = function () {
         canvasInit();
-        loadTrianglesFromLocalStorage();
-        drawCanvasTriangles();
+        loadLastEditedCanvas();
         //attach click handlers
         attachCanvasClickEventListener();
         attachUIEventListeners();
