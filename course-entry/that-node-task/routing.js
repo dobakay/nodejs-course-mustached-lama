@@ -122,7 +122,7 @@ function setupRoutes(app) {
             if(err) {
                 next(err);
             } else {
-                res.statusCode(200).send({
+                res.status(200).send({
                     Result: count
                 });
             }
