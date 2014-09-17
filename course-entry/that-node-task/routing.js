@@ -142,7 +142,17 @@ function setupRoutes(app) {
              }
          with a status code of 404.
          */
-        next('routing.js: "Delete item by id" route handler not implemented');
+        db.deleteById(id, function (err, deletedItem) {
+            if(err) {
+                res.status(404).send({
+                    Error: err
+                });
+            } else {
+                res.status(200).send({
+                    Result: deletedItem
+                });
+            }
+        })
     });
 };
 

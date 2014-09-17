@@ -114,7 +114,23 @@ Db.prototype.updateById = function(id, item, done){
  * @param done
  */
 Db.prototype.deleteById = function(id, done){
-    done('Method deleteById in Db.js not implemented');
+    var self = this;
+    this.readItems(function (err, data) {
+        if(err) {
+            return done(err);
+        }
+        var deletedItem = removeItem(id, data);
+        if(deletedItem === null) {
+            done('Item not found');
+        } else {
+            self.writeItems(data, function (err) {
+                if(err) {
+                    return done(err);
+                }
+                done(null, deletedItem);
+            });
+        }
+    });
 };
 
 /**
@@ -209,7 +225,31 @@ var updateById = function(id, item, data) {
         }
     };
 
-    return -1
+    return -1;
+}
+
+/**
+ * Removes item by given id from data Array
+ * and returns the item
+ * @param  {[type]} id   [description]
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+var removeItem = function (id, data) {
+    var index = -1,
+        itemToDelete = null;
+    for (var i = 0; i < data.length; i++) {
+        if(data[i].id === id) {
+            index = i;
+            break;
+        }
+    };
+
+    if(index !== -1) {
+        itemToDelete = data.splice(index, 1)[0];
+    }
+
+    return itemToDelete;
 }
 
 module.exports = Db;
