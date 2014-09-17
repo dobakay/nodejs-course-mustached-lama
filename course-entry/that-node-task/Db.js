@@ -84,7 +84,28 @@ Db.prototype.getById = function(id, done) {
  */
 Db.prototype.updateById = function(id, item, done){
     //See Db.prototype.getById
-    done('Method updateById in Db.js not implemented');
+    var self = this;
+    this.readItems(function(err, data) {
+        if(err){
+            return done(err);
+        }
+        if(!item.id || item.id !== id) {
+            item.id = id;
+        }
+
+        var updatedItemIndex = updateById(id, item, data);
+
+        if(updatedItemIndex === -1) {
+            done('Item not found');
+        } else {
+            self.writeItems(data, function (err) {
+                if(err) {
+                    return done(err);
+                }
+                done(null, item);
+            });
+        }
+    });
 };
 
 /**
@@ -101,7 +122,15 @@ Db.prototype.deleteById = function(id, done){
  * @param done - done(err, count)
  */
 Db.prototype.deleteAll = function(done){
-    done('Method deleteAll in Db.js not implemented');
+    var self = this;
+    this.readItems(function (err, data) {
+        if(err) {
+            return done(err);
+        }
+        var itemsCount = data.length;
+        self.clear();
+        return done(null, itemsCount);
+    });
 };
 
 /**
@@ -162,5 +191,25 @@ var findById = function(id, data) {
     }
     return null;
 };
+
+/**
+ * Updates an item with id in the Data Array.
+ * Returns the index of the updatedItem in the array, or -1
+ * (if no item was updated).
+ * @param  id
+ * @param  item
+ * @param  data
+ * @return
+ */
+var updateById = function(id, item, data) {
+    for (var i = 0; i < data.length; i++) {
+        if(data[i].id === id) {
+            data[i] = item;
+            return i;
+        }
+    };
+
+    return -1
+}
 
 module.exports = Db;

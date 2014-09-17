@@ -98,7 +98,17 @@ function setupRoutes(app) {
             }
          with a status code of 404.
          */
-        next('routing.js: "Update by id" route handler not implemented');
+        db.updateById(id, item, function(err, updatedItem) {
+            if(err) {
+                res.status(404).send({
+                    Error: err
+                });
+            } else {
+                res.status(200).send({
+                    Result: updatedItem
+                });
+            }
+        });
     });
 
     app.delete('/db', function (req, res, next) {
@@ -108,8 +118,15 @@ function setupRoutes(app) {
                 Result: (Number: count of the items)
              }
          */
-        next('routing.js: "Delete all items" route handler not implemented');
-
+         db.deleteAll(function (err, count) {
+            if(err) {
+                next(err);
+            } else {
+                res.statusCode(200).send({
+                    Result: count
+                });
+            }
+         });
     });
 
     app.delete('/db/:id', function (req, res, next) {

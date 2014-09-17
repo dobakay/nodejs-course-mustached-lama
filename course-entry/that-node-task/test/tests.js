@@ -97,7 +97,7 @@ describe('', function(){
         });
 
         describe('#get by id', function() {
-            it('should return .Result containing the item with the specified id', function(done){
+            it('should return Result containing the item with the specified id', function(done){
                 var item = generateItem();
                 db.addItem(item, function(err, createdItem){
                     read(createdItem.id, function(err, res, body) {
@@ -128,7 +128,7 @@ describe('', function(){
         });
 
         describe('#update by id', function() {
-            it('should return .Result containing the updated item', function(done){
+            it('should return Result containing the updated item', function(done){
                 var item = generateItem();
                 db.addItem(item, function(err, createdItem){
                     var updateItem = {
