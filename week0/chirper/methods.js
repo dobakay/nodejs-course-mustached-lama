@@ -40,6 +40,17 @@ var methods = (function() {
         return isRegistered;
     }
 
+    function filterChirpsByIdOrUserId (id) {
+        var filteredById = chirps.filter(function(chirp){
+            chirp.chirpId === id;
+        });
+        var filteredByUserId = chirps.filter(function(chirp){
+            chirp.userId === id;
+        });
+
+        return filteredById.concat(filteredByUserId);
+    }
+
     ////////////////////
     // Main Functions //
     ////////////////////
@@ -53,6 +64,7 @@ var methods = (function() {
             userId: key,
             chirpText: text
         });
+        return chirpId;
     }
 
     methods.getAllChirps = function () {
@@ -67,6 +79,11 @@ var methods = (function() {
             }
         };
         return userChirps;
+    }
+
+    methods.getChirps = function (id) {
+        var filteredChirps = filterChirpsByIdOrUserId(id);
+        return filteredChirps;
     }
 
     methods.registerUser = function (userName) {
