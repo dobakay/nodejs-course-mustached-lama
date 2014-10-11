@@ -20,8 +20,7 @@ var router = (function() {
     ////////////////////////
 
     function addMethod (method, url, callback) {
-
-        if(!!requests[method]) {
+        if(!requests[method]) {
             requests[method] = {
                 callbacks: {}
             }
@@ -39,14 +38,14 @@ var router = (function() {
      * @return {[type]}              [description]
      */
     function executeCallback (method, url, response, callbackArgs) {
-        if(!!requests[method]) {
+        if(!requests[method]) {
             throw new RouterException('HTTP Method not found.');
         }
         else {
-            if(!!requests[method].callbacks[url]) {
+            if(!requests[method].callbacks[url]) {
                 throw new RouterException('HTTP Method with url "' + url + '" was not found.');
             }
-            if(!!callbackArgs) {
+            if(!callbackArgs) {
                 requests[method].callbacks[url](response);
             }
             else {
@@ -65,28 +64,28 @@ var router = (function() {
     ////////////////////////////////
 
     router.get = function (url, callback) {
-        if(!!url && !!callback) {
+        if(!url && !callback) {
             throw new RouterException('Url, or callback is undefined or null.');
         }
         addMethod('GET', url, callback);
     }
 
     router.post = function (url, callback) {
-        if(!!url && !!callback) {
+        if(!url && !callback) {
             throw new RouterException('Url, or callback is undefined or null.');
         }
         addMethod('POST', url, callback);
     }
 
     router.put = function (url, callback) {
-        if(!!url && !!callback) {
+        if(!url && !callback) {
             throw new RouterException('Url, or callback is undefined or null.');
         }
         addMethod('PUT', url, callback);
     }
 
     router.delete = function (url, callback) {
-        if(!!url && !!callback) {
+        if(!url && !callback) {
             throw new RouterException('Url, or callback is undefined or null.');
         }
         addMethod('DELETE', url, callback);
@@ -95,11 +94,11 @@ var router = (function() {
     router.process = function (request) {
         var method = request.method,
             url = request.url,
-            response = request.response;
+            response = request.response,
             data = request.body,
             args = null;
 
-        if(!!data || data === '') {
+        if(!data || data === '') {
             data = JSON.parse(data);
             args = convertJsonToArguments(data);
         }
@@ -111,9 +110,7 @@ var router = (function() {
             console.log(err.type);
             console.log(err.message);
             console.log(err.internalMessage);
-        }
-        finally() {
-
+            response.writeHead(404, "Could not handle that Error: " + err.message, {'Content-Type': 'text/html'});
         }
     }
 
