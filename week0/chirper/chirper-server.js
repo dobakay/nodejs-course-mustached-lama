@@ -8,9 +8,6 @@ var server = http.createServer(function (req, res) {
     });
 
     req.on('end', function () {
-        if(payload === '') {
-            payload = undefined;
-        }
         handler.serve({
             response: res,
             body: payload,

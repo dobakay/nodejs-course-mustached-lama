@@ -90,6 +90,9 @@ var requestHandler = (function() {
     /////////////////////////////
 
     requestHandler.serve = function (requestData) {
+        if(requestData.body === '') {
+            requestData.body = undefined;
+        }
         router.process(requestData);
     }
 
