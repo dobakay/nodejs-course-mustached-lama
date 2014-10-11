@@ -19,6 +19,13 @@ var router = (function() {
     // Internal Functions //
     ////////////////////////
 
+    /**
+     * Adds a HTTP Method with the corresponding, url the handler for it.
+     * There can be one HTTP Method with many urls.
+     * @param {GET/POST/PUT/DELETE}   method   HTTP Method
+     * @param {URL String}   url      URL String gotten from the request object
+     * @param {Function} callback Handler that makes a call to the "hard-core" logic of the server
+     */
     function addMethod (method, url, callback) {
         if(!requests[method]) {
             requests[method] = {
@@ -55,6 +62,11 @@ var router = (function() {
         }
     }
 
+    /**
+     * Converts a json object to an array of values without the keys
+     * @param  {JSON} jsonObj
+     * @return {argsArray}
+     */
     function convertJsonToArguments (jsonObj) {
         return Object.keys(jsonObj).map(function (key) {return jsonObj[key]});
     }
@@ -91,6 +103,12 @@ var router = (function() {
         addMethod('DELETE', url, callback);
     }
 
+
+    /**
+     * Handles synchronously a request and invokes the correct HTTP Method with the request
+     * parameters. If an unhandled error occurs returns a generic 404 Error response.
+     * @param  {Object} request
+     */
     router.process = function (request) {
         var method = request.method,
             url = request.url,
