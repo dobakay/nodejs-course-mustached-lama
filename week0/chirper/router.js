@@ -9,8 +9,9 @@ var router = (function() {
     // Generic Router Exception Def  //
     ///////////////////////////////////
 
-    function RouterException (message, internalMessage) {
+    function RouterException (message, innerType, internalMessage) {
         this.type = 'RouterException';
+        this.innerType = innerType || 'innerServerException';
         this.message = message;
         this.internalMessage = internalMessage || null;
     }
@@ -18,6 +19,11 @@ var router = (function() {
     ////////////////////////
     // Internal Functions //
     ////////////////////////
+
+    function returnErrorResponse (response, statusCode, error) {
+        response.writeHead(statusCode, error.message, {'Content-Type': 'text/html'});
+        response.end();
+    }
 
     /**
      * Adds a HTTP Method with the corresponding, url the handler for it.
@@ -50,7 +56,7 @@ var router = (function() {
         }
         else {
             if(!requests[method].callbacks[url]) {
-                throw new RouterException('HTTP Method with url "' + url + '" was not found.');
+                throw new RouterException('HTTP Method with url "' + url + '" was not found.', 'pageNotFoundException');
             }
             if(!callbackArgs) {
                 requests[method].callbacks[url](response);
@@ -129,8 +135,12 @@ var router = (function() {
             console.log(err.type);
             console.log(err.message);
             console.log(err.internalMessage);
-            response.writeHead(404, "Could not handle that Error: " + err.message, {'Content-Type': 'text/html'});
-            response.end();
+            if(err.innerType === 'pageNotFoundException') {
+                returnErrorResponse(response, 404, "Page not found.");
+            }
+            else {
+                returnErrorResponse(response, 500, "Could not handle that Error: " + err.message);
+            }
         }
     }
 
