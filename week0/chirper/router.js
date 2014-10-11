@@ -95,10 +95,11 @@ var router = (function() {
         var method = request.method,
             url = request.url,
             response = request.response,
-            data = request.body,
+            data = request.body, //unparsed JSON string or undefined
             args = null;
 
-        if(!data || data === '') {
+        if(!!data ) {
+            console.log(data);
             data = JSON.parse(data);
             args = convertJsonToArguments(data);
         }
