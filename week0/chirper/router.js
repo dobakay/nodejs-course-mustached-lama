@@ -130,6 +130,7 @@ var router = (function() {
             console.log(err.message);
             console.log(err.internalMessage);
             response.writeHead(404, "Could not handle that Error: " + err.message, {'Content-Type': 'text/html'});
+            response.end();
         }
     }
 
