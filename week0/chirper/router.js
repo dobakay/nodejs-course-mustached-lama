@@ -1,61 +1,125 @@
-var methods = require('./methods');
+var router = (function() {
+    'use strict';
 
+    var router = {};
 
-// GET /all_chirps - returns all the chirps for all the users we have. Newest chirps should be first.
-// POST /chirp - expects user, key and chirpText arguments. Creates a new chirp on behalf of user
-// POST /register - expects user as argument. Creates a new user and returns a key for that user. If the user already exists just returns a 409 response code.
-// GET /my_chirps - expects user and key as arguments. Returns all chirps of user
-// DELETE /chirp - expects key and chirpId as arguments. Deletes the chirp with the given id if the key matches the key of the chirp owner. Otherwise returns a 403 response code.
+    var requests = {};
 
-function router (request) {
-    var res = null,
-        finalResult = null;
-    try {
-        switch(request.method) {
-            case 'GET':
-                if(request.url.indexOf('/all_chirps') !== -1) {
-                    res = methods.getAllChirps();
-                }
-                else if(request.url.indexOf('/my_chirps') !== -1) {
-                    var data = JSON.parse(request.body);
-                    res = methods.getUserChirps(data.user, data.key);
-                }
-            break;
-            case 'POST':
-                if(request.url.indexOf('/register') !== -1) {
-                    var data = JSON.parse(request.body);
-                    res = methods.registerUser(data.user);
-                }
-                if(request.url.indexOf('/chirp') !== -1) {
-                    var data = JSON.parse(request.body);
-                    res = methods.addChirp(data.name, data.key, data.chirpText);
-                }
-            break;
-            case 'DELETE':
-                if(request.url.indexOf('/chirp') !== -1) {
-                    var data = JSON.parse(request.body);
-                    res = methods.deleteChirp(data.chirpid, data.key);
-                }
-            break;
+    ///////////////////////////////////
+    // Generic Router Exception Def  //
+    ///////////////////////////////////
 
+    function RouterException (message, internalMessage) {
+        this.type = 'RouterException';
+        this.message = message;
+        this.internalMessage = internalMessage || null;
+    }
+
+    ////////////////////////
+    // Internal Functions //
+    ////////////////////////
+
+    function addMethod (method, url, callback) {
+
+        if(!!requests[method]) {
+            requests[method] = {
+                callbacks: {}
+            }
+        }
+        requests[method].callbacks[url] = callback;
+    }
+
+    /**
+     * Executes one of the predefined actions depending on the given parameters object in the process function.
+     * @param  {[type]} method       'GET/POST/PUT/DELETE'
+     * @param  {[type]} url          '/example/url'. Url that we get from the http request object.
+     * @param  {[type]} callbackArgs callbackArgs[0] is always a http response object.
+     *                               The rest are fields of the json object passed with the request (if such an object
+     *                               was passed)
+     * @return {[type]}              [description]
+     */
+    function executeCallback (method, url, response, callbackArgs) {
+        if(!!requests[method]) {
+            throw new RouterException('HTTP Method not found.');
+        }
+        else {
+            if(!!requests[method].callbacks[url]) {
+                throw new RouterException('HTTP Method with url "' + url + '" was not found.');
+            }
+            if(!!callbackArgs) {
+                requests[method].callbacks[url](response);
+            }
+            else {
+                callbackArgs.unshift(response);
+                requests[method].callbacks[url].apply(null, callbackArgs);
+            }
+        }
+    }
+
+    function convertJsonToArguments (jsonObj) {
+        return Object.keys(jsonObj).map(function (key) {return jsonObj[key]});
+    }
+
+    ////////////////////////////////
+    // EXPRESS-like API functions //
+    ////////////////////////////////
+
+    router.get = function (url, callback) {
+        if(!!url && !!callback) {
+            throw new RouterException('Url, or callback is undefined or null.');
+        }
+        addMethod('GET', url, callback);
+    }
+
+    router.post = function (url, callback) {
+        if(!!url && !!callback) {
+            throw new RouterException('Url, or callback is undefined or null.');
+        }
+        addMethod('POST', url, callback);
+    }
+
+    router.put = function (url, callback) {
+        if(!!url && !!callback) {
+            throw new RouterException('Url, or callback is undefined or null.');
+        }
+        addMethod('PUT', url, callback);
+    }
+
+    router.delete = function (url, callback) {
+        if(!!url && !!callback) {
+            throw new RouterException('Url, or callback is undefined or null.');
+        }
+        addMethod('DELETE', url, callback);
+    }
+
+    router.process = function (request) {
+        var method = request.method,
+            url = request.url,
+            response = request.response;
+            data = request.body,
+            args = null;
+
+        if(!!data || data === '') {
+            data = JSON.parse(data);
+            args = convertJsonToArguments(data);
         }
 
-        finalResult = {
-            err: null,
-            res: res
-        };
-    }
-    catch(err) {
-        finalResult = {
-            err: err,
-            res: null
+        try {
+            executeCallback(method, url, response, args);
+        }
+        catch(err) {
+            console.log(err.type);
+            console.log(err.message);
+            console.log(err.internalMessage);
+        }
+        finally() {
+
         }
     }
-    finally {
-        console.log(methods.getState());
-        return finalResult;
-    }
-}
+
+    return router;
+
+}());
+
 
 module.exports = router;
-
