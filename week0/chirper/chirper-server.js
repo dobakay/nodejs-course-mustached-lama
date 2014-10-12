@@ -30,32 +30,39 @@ function returnDefaultResponse (response) {
 
 (function initChirper () {
     // GET /all_chirps - returns all the chirps for all the users we have. Newest chirps should be first.
-    walter.get('/all_chirps', function (response) {
-        var allChirps = methods.getAllChirps();
-        returnDataResponse(response, allChirps);
+    walter.get('/all_chirps', function (request, response) {
+        console.log(request);
+
+        // var allChirps = methods.getAllChirps();
+        // returnDataResponse(response, allChirps);
     });
     // GET /my_chirps - expects user and key as arguments. Returns all chirps of user
-    walter.get('/my_chirps', function (response, user, key) {
-        var userChirps = methods.getUserChirps(user, key);
-        returnDataResponse(reponse, userChirps);
+    walter.get('/my_chirps', function (request, response) {
+        console.log(request);
+        // var userChirps = methods.getUserChirps(user, key);
+        // returnDataResponse(reponse, userChirps);
     });
     // GET /chirps - expects either chirpId or userId as an argument. If given both ignores chirpId. Returns a list of chirps.
-    walter.get('/chirps', function (response, id) {
-        var chirps = methods.getChirps(id); // returns an array of chirps even if the specified id is of a single chirp
-        returnDataResponse(response, chirps);
+    walter.get('/chirps', function (request, response) {
+        console.log(request);
+        // var chirps = methods.getChirps(id); // returns an array of chirps even if the specified id is of a single chirp
+        // returnDataResponse(response, chirps);
     });
     // GET /all_users - returns all the registered users.
-    walter.get('/get_users', function (response) {
-        var users = methods.getAllUsers();
-        returnDataResponse(response, users);
+    walter.get('/get_users', function (request, response) {
+        console.log(request);
+        // var users = methods.getAllUsers();
+        // returnDataResponse(response, users);
     });
 
     // POST /register - expects user as argument. Creates a new user and returns a key for that user. If
     // the user already exists just returns a 409 response code.
-    walter.post('/register', function (response, user) {
+    walter.post('/register', function (request, response) {
+        var json = JSON.parse(request.payload);
         try {
-            var userId = methods.registerUser(user);
-            returnDataResponse(response, {key: userId});
+            var userInfo = methods.registerUser(json.user);
+            console.log(userInfo);
+            returnDataResponse(response, {key: userInfo.userId});
         }
         catch(err) {
             returnErrorResponse(response, 409, err);
@@ -63,26 +70,33 @@ function returnDefaultResponse (response) {
     });
     // POST /chirp - expects user, key and chirpText arguments. Creates a new chirp on behalf of user and
     // returns a chirpId, which should be unique for every chirp!
-    walter.post('/chirp', function (response, user, key, chirpText) {
+    walter.post('/chirp', function (request, response) {
+        var json = JSON.parse(request.payload),
+            user = json.user,
+            key = json.key,
+            chirpText = json.chirpText;
+        console.log(request);
+
         var chirpId = methods.addChirp(user, key, chirpText);
             returnDataResponse(response, {chirpId: chirpId});
     });
 
     // DELETE /chirp - expects key and chirpId as arguments. Deletes the chirp with the given id if the
     // key matches the key of the chirp owner. Otherwise returns a 403 response code.
-    walter.delete('/chirp', function (response, key, chirpId) {
-        try {
-            var chirp = methods.deleteChirp(key, chirpId);
-            returnDataResponse(response, {removedChirp: chirp});
-        }
-        catch(err) {
-            returnErrorResponse(response, 403, err);
-        }
+    walter.delete('/chirp', function (request, response) {
+        console.log(request);
+        // try {
+        //     var chirp = methods.deleteChirp(key, chirpId);
+        //     returnDataResponse(response, {removedChirp: chirp});
+        // }
+        // catch(err) {
+        //     returnErrorResponse(response, 403, err);
+        // }
     });
 
 
 
-    walter.serve(9000);
+    walter.serve(1337);
 })();
 
 
