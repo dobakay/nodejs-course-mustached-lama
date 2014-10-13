@@ -1,0 +1,19 @@
+{
+  "name": "chirper",
+  "version": "0.0.0",
+  "description": "twitter-like-api",
+  "main": "chirper-server.js",
+  "dependencies": {
+    "chai": "~1.9.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "//github.com/Putzmitt3l/nodejs-course-mustached-lama/tree/master/week0/chirper"
+  },
+  "author": "Dobata",
+  "license": "MIT"
+}
