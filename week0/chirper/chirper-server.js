@@ -78,7 +78,7 @@ function returnDefaultResponse (response) {
         console.log(request);
 
         var chirpId = methods.addChirp(user, key, chirpText);
-            returnDataResponse(response, {chirpId: chirpId});
+        returnDataResponse(response, {chirpId: chirpId});
     });
 
     // DELETE /chirp - expects key and chirpId as arguments. Deletes the chirp with the given id if the
