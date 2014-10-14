@@ -6,12 +6,20 @@ var methods = (function() {
     var methods = {};
     var subs = null;
 
-    methods.init = function () {
-        storage.initSync();
-        loadfromLocal();
-    }
+    (function init () {
+        storage.initSync({
+            dir:'../persist',
+            stringify: JSON.stringify,
+            parse: JSON.parse,
+            encoding: 'utf8',
+            logging: false,  // can also be custom logging function
+            continuous: true,
+            interval: false
+        });
+        loadFromLocal();
+    })();
 
-    function loadfromLocal () {
+    function loadFromLocal () {
         subs = storage.getItem('subs');
 
         if(!subs) {
@@ -28,19 +36,20 @@ var methods = (function() {
 
     methods.subscribeUser = function(userMail, keywords) {
         var userId = generatekey.generateKey();
+        var keyWordsSetId = generatekey.generateKey();
 
         if(!!subs[userId]) {
-            subs[userId].keyWordsSets.push(keywords);
+            subs[userId].keyWordsSets[keyWordsSetId] = keywords;
         }
         else {
             subs[userId] = {
                 subscriberId: userId,
                 email: userMail,
-                keyWordsSets: [keywords]
+                keyWordsSets: {
+                    keyWordsSetId: keywords;
+                }
             }
         }
-
-        console.log(subs);
 
         // storing in localStorage the newSubsState
         storeInLocal(subs);
@@ -76,8 +85,6 @@ var methods = (function() {
 
         return subsList;
     }
-
-    methods.init();
 
     return methods;
 
