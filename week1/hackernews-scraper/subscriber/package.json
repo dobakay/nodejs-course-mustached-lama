@@ -10,6 +10,8 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "express": "~4.9.7",
-    "body-parser": "~1.9.0"
+    "body-parser": "~1.9.0",
+    "generate-key": "0.0.6",
+    "node-persist": "0.0.2"
   }
 }
