@@ -63,6 +63,7 @@ var methods = (function() {
             userName: user,
             userId: key,
             chirpText: text
+            chipTime: Date.now()
         });
         return chirpId;
     }
@@ -71,7 +72,7 @@ var methods = (function() {
         return chirps;
     }
 
-    methods.getUserChirps = function (userName, userId) {
+    methods.getUserChirps = function (userId) {
         var userChirps = [];
         for (var i = 0; i < chirps.length; i++) {
             if(chirps[i].userId === userId) {
@@ -79,6 +80,24 @@ var methods = (function() {
             }
         };
         return userChirps;
+    }
+
+    methods.getUserChirpsCount = function (userId) {
+        var counter = 0;
+        for (var i = 0; i < chirps.length; i++) {
+            if(chirps[i].userId === userId) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    methods.getUsers = function () {
+        var returnedUsers = users;
+        for (var i = 0; i < returnedUsers.length; i++) {
+            returnedUsers[i].chirps = methods.getUserChirpsCount(returnedUsers[i].userId);
+        }
+        return returnedUsers;
     }
 
     methods.getChirps = function (id) {
