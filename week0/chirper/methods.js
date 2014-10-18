@@ -62,7 +62,7 @@ var methods = (function() {
             chirpId: chirpId,
             userName: user,
             userId: key,
-            chirpText: text
+            chirpText: text,
             chipTime: Date.now()
         });
         return chirpId;

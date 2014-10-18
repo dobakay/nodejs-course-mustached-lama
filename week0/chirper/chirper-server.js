@@ -58,6 +58,7 @@ function returnDefaultResponse (response) {
         var json = JSON.parse(request.payload);
         try {
             var userInfo = methods.registerUser(json.user);
+            console.log(userInfo);
             returnDataResponse(response, {key: userInfo.userId});
         }
         catch(err) {
@@ -91,7 +92,7 @@ function returnDefaultResponse (response) {
 
 
 
-    walter.serve(1337);
+    walter.serve(8000);
 })();
 
 
