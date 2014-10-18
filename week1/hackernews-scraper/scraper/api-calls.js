@@ -25,40 +25,32 @@ var calls = (function() {
         });
     }
 
-    calls.getArticle = function (articleId) {
+    calls.getArticle = function (articleId, callback) {
         requestMod({
             uri: hn.item.replace('{{id}}', articleId),
             method: "GET",
-        }, function(error, response, body) {
-            console.log(body);
-        });
+        }, callback(error, response, body));
     }
 
-    calls.getTopArticles = function () {
+    calls.getTopArticles = function (callback) {
         requestMod({
             uri: hn.topStories,
             method: "GET",
-        }, function(error, response, body) {
-            console.log(body);
-        });
+        }, callback(error, response, body));
     }
 
-    calls.getMaxItem = function () {
+    calls.getMaxItem = function (callback) {
         requestMod({
             uri: hn.maxitem,
             method: "GET",
-        }, function(error, response, body) {
-            console.log(body);
-        });
+        }, callback(error, response, body));
     }
 
-    calls.getUpdates =function () {
+    calls.getUpdates =function (callback) {
         requestMod({
             uri: hn.updates,
             method: "GET",
-        }, function(error, response, body) {
-            console.log(body);
-        });
+        }, callback(error, response, body));
     }
 
     return calls;
