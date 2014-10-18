@@ -1,10 +1,10 @@
-var methods = (function() {
+var localStorage = (function() {
     'use strict';
     var generatekey = require('generate-key');
     var storage = require('node-persist');
 
 
-    var methods = {};
+    var localStorage = {};
     var articles = null;
 
     (function init () {
@@ -22,7 +22,7 @@ var methods = (function() {
         loadFromLocal();
     })();
 
-    function loadFromLocal () {
+    localStorage.loadFromLocal = function () {
         articles = storage.getItem('articles');
 
         if(!articles) {
@@ -33,11 +33,15 @@ var methods = (function() {
         }
     }
 
-    function storeInLocal (newJsonState) {
+    localStorage.storeInLocal = function (newJsonState) {
         storage.setItem('articles', newJsonState);
     }
 
+    localStorage.articles = articles;
 
-    return methods;
+    return localStorage;
 
 }());
+
+
+module.exports = localStorage;
