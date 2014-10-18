@@ -61,7 +61,7 @@ var comparer = (function() {
 
     (function init () {
         comparer.initSync({
-            dir:'../persist',
+            dir:'../../../persist',
             stringify: JSON.stringify,
             parse: JSON.parse,
             encoding: 'utf8',
