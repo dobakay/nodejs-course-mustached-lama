@@ -1,0 +1,16 @@
+{
+  "name": "chirp-client",
+  "version": "0.0.0",
+  "description": "",
+  "main": "client.js",
+  "dependencies": {
+    "argparse": "~0.1.15",
+    "curlrequest": "~0.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause"
+}

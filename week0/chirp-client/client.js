@@ -1,99 +1,88 @@
-// We need this to build our post string
-var querystring = require('querystring');
-var http = require('http');
-var fs = require('fs');
+var ArgumentParser  = require('argparse').ArgumentParser;
+var parser = new ArgumentParser({ description: 'chirping client' });
+var serverCalls = require('./server-calls');
+'use strict';
 
-function postCode(url, route, codestring, port) {
-  // Build the post string from an object
-  var post_data = querystring.stringify({
-      'compilation_level' : 'ADVANCED_OPTIMIZATIONS',
-      'output_format': 'json',
-      'output_info': 'compiled_code',
-        'warning_level' : 'QUIET',
-        'js_code' : codestring
-  });
+///////////////////
+// register user //
+///////////////////
+parser.addArgument(['--register'], {
+    dest: 'command',
+    action: 'storeConst',
+    constant: serverCalls.register
+});
 
-  // An object of options to indicate where to post to
-  var post_options = {
-      host: url,
-      port: port,
-      path: route,
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': post_data.length
-      }
-  };
-
-  // Set up the request
-  var post_req = http.request(post_options, function(res) {
-      res.setEncoding('utf8');
-      var result = ''
-      res.on('data', function (chunk) {
-          // console.log('Response: ' + chunk);
-          result += chunk;
-      });
-
-      res.on('end', function () {
-          console.log(result);
-      })
-  });
-
-  // post the data
-  post_req.write(post_data);
-  post_req.end();
-
-}
+parser.addArgument(['--user'], {
+    dest: 'user',
+    type: 'string'
+});
 
 
-function requestAllChirps (url) {
-    var chirpsStr = '';
+//////////////////////
+// create new chirp //
+//////////////////////
+parser.addArgument(['--create'], {
+    dest: 'command',
+    action: 'storeConst',
+    constant: serverCalls.sendChirp
+});
 
-    http.get(url, function (res) {
-        res.on('data', function (d) {
-            chirpsStr += d;
-        });
-        res.on('end', function () {
-            str+=os.EOL;
-            console.log(str);
-        });
-    });
-}
+parser.addArgument(['--message'], {
+    dest: 'message',
+    type: 'string'
+});
 
-function requestUserChirps (url, userId) {
 
-}
+//////////////////
+//get my chirps //
+//////////////////
+parser.addArgument(['--getself'], {
+    dest: 'command',
+    action: 'storeConst',
+    constant: serverCalls.userChirps
+});
 
-function requestChirps (url, id) { //id is either userId or chirpId
 
-}
+////////////////////
+// get all chirps //
+////////////////////
+parser.addArgument(['--getall'], {
+    dest: 'command',
+    action: 'storeConst',
+    constant: serverCalls.allChirps
+});
 
-function sendChirp (url, user, key, chirpText) {
 
-}
+//////////////////
+// delete chirp //
+//////////////////
+parser.addArgument(['--delete'], {
+    dest: 'command',
+    action: 'storeConst',
+    constant: serverCalls.deleteChirp
+});
 
-function registerUser (url, route, port, userName) {
-    var obj = {
-        user: userName
-    };
+parser.addArgument(['--chirpid'], {
+    dest: 'chirpid',
+    type: 'string'
+});
 
-    postCode(url, route, port, obj);
-}
+///////////////
+// Execution //
+///////////////
+var args = parser.parseArgs(process.argv.slice(2));
 
-function getAllUsers (url) {
-    var usersStr = '';
-
-    http.get(url, function (res) {
-        res.on('data', function (d) {
-            usersStr += d;
-        });
-        res.on('end', function () {
-            str+=os.EOL;
-            console.log(str);
-        });
-    });
-}
-
-function deleteChirp (url, key, chirpId) {
-
-}
+(function executeCommands (args) {
+    if(!!args.user) {
+        args.command(args.user);
+    }
+    else if(!!args.chirpid) {
+        args.command(args.chirpid)
+    }
+    else if(!!args.message) {
+        args.command(args.message);
+    }
+    else {
+        args.command();
+    }
+})(args);
