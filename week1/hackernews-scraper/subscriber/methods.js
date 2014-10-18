@@ -8,7 +8,9 @@ var methods = (function() {
 
     (function init () {
         storage.initSync({
-            dir:'../persist',
+            // getting out of node_module directory
+            // and creating a file in the hackernews folder
+            dir:'../../../persist',
             stringify: JSON.stringify,
             parse: JSON.parse,
             encoding: 'utf8',
@@ -26,12 +28,12 @@ var methods = (function() {
             subs = {}
         }
         else {
-            subs = JSON.parse(subs);
+            subs = subs;
         }
     }
 
     function storeInLocal (newJsonState) {
-        storage.setItem('subscribers', JSON.stringify(newJsonState));
+        storage.setItem('subscribers', newJsonState);
     }
 
     methods.subscribeUser = function(userMail, keywords) {
@@ -46,7 +48,7 @@ var methods = (function() {
                 subscriberId: userId,
                 email: userMail,
                 keyWordsSets: {
-                    keyWordsSetId: keywords;
+                    keyWordsSetId: keywords
                 }
             }
         }
@@ -78,7 +80,6 @@ var methods = (function() {
 
     methods.getAllSubscribers = function() {
         var subsList = [];
-        console.log('test');
         for (var key in subs) {
             subsList.push(subs[key]);
         }

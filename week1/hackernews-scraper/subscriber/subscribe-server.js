@@ -32,7 +32,6 @@ app.post('/unsubscribe', function (request, response) {
 
 app.get('/listSubscribers', function (request, response) {
     var allSubs = methods.getAllSubscribers();
-    console.log(allSubs);
     response.json(allSubs);
     response.end();
 });
