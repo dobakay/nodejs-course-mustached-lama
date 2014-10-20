@@ -29,28 +29,36 @@ var calls = (function() {
         requestMod({
             uri: hn.item.replace('{{id}}', articleId),
             method: "GET",
-        }, callback(error, response, body));
+        }, function (error, response, body) {
+            callback(error, response, body);
+        });
     }
 
     calls.getTopArticles = function (callback) {
         requestMod({
             uri: hn.topStories,
             method: "GET",
-        }, callback(error, response, body));
+        }, function (error, response, body) {
+            callback(error, response, body);
+        });
     }
 
     calls.getMaxItem = function (callback) {
         requestMod({
             uri: hn.maxitem,
             method: "GET",
-        }, callback(error, response, body));
+        }, function (error, response, body) {
+            callback(error, response, body);
+        });
     }
 
     calls.getUpdates =function (callback) {
         requestMod({
             uri: hn.updates,
             method: "GET",
-        }, callback(error, response, body));
+        }, function (error, response, body) {
+            callback(error, response, body);
+        });
     }
 
     return calls;
