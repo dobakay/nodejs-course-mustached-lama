@@ -5,9 +5,11 @@ var localStorage = (function() {
 
     var localStorage = {};
     var articles = null;
+    var maxItem = null;
 
     localStorage.loadFromLocal = function () {
         articles = storage.getItem('articles');
+        maxItem = storage.getItem('maxItem');
 
         if(!articles) {
             articles = {}
@@ -17,8 +19,8 @@ var localStorage = (function() {
         }
     }
 
-    localStorage.storeInLocal = function (newJsonState) {
-        storage.setItem('articles', newJsonState);
+    localStorage.storeInLocal = function (key, object) {
+        storage.setItem(key, object);
     }
 
     localStorage.init = function () {
@@ -35,6 +37,7 @@ var localStorage = (function() {
         });
         localStorage.loadFromLocal();
         localStorage.articles = articles;
+        localStorage.maxItem = maxItem;
     };
 
     localStorage.init();
