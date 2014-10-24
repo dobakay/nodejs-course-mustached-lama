@@ -35,7 +35,7 @@ function init (callback) {
             lastNewItemId = body;
         }
         callback();
-    })
+    });
 }
 
 function afterSetup () {
@@ -46,6 +46,44 @@ function afterSetup () {
         var rangeLength = newItemsRange.length;
         asyncLoop(rangeLength, iterationFunction, loopEndCallback);
     }
+}
+
+/**
+ * Asynchronous loop function for iterably executing asynchronous functions
+ * @param  {int}   iterations how many cycles there are in the loop
+ * @param  {Function}   func       the asynchronous function, takes a 'loop' parameter
+ *                                 (a deffered object for asynchrous controlling, which has
+ *                                  a 'next' method called every iterration after async function is executed)
+ * @param  {Function} callback   function that executes always at the end of the loop
+ * @return {[type]}              [description]
+ */
+function asyncLoop (iterations, func, callback) {
+    var index = 0;
+    var done = false;
+    var loop = {
+        next: function () {
+            if(done) {
+                return;
+            }
+            if(index < iterations) {
+                func(loop);
+                index++;
+            }
+            else {
+                done = true;
+                callback();
+            }
+        },
+        iterration: function () {
+            return index;
+        },
+        break: function () {
+            done = true;
+            callback();
+        }
+    };
+    loop.next();
+    return loop;
 }
 
 function iterationFunction (loop) {
@@ -100,53 +138,6 @@ function createNewItemsRange (lastItemId, newItemId) {
         result.push(i);
     }
     return result;
-}
-
-/**
- * Asynchronous loop function for iterably executing asynchronous functions
- * @param  {int}   iterations how many cycles there are in the loop
- * @param  {Function}   func       the asynchronous function, takes a 'loop' parameter
- *                                 (a deffered object for asynchrous controlling, which has
- *                                  a 'next' method called every iterration after async function is executed)
- * @param  {Function} callback   function that executes always at the end of the loop
- * @return {[type]}              [description]
- */
-function asyncLoop (iterations, func, callback) {
-    var index = 0;
-    var done = false;
-    var loop = {
-        next: function () {
-            if(done) {
-                return;
-            }
-
-            if(index < iterations) {
-                func(loop);
-                index++;
-            }
-
-            else {
-                done = true;
-                callback();
-            }
-        },
-
-        iterration: function () {
-            return index;
-        },
-
-        break: function () {
-            done = true;
-            callback();
-        },
-
-        getDoneStatus: function () {
-            return done;
-        }
-    };
-
-    loop.next();
-    return loop;
 }
 
 
