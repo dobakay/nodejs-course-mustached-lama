@@ -10,48 +10,17 @@ var buffer = null;
 
 function mainLoop () {
     setTimeout(function () {
-        processArticles();
+        processItems();
     }, 3000);
 };
 mainLoop();
 
-function processArticles () {
-    init(function afterSetup () {
-        if(!!newItemsRange && newItemsRange.length !== 0) { // if we have new entries, iterate through them
-            if(!buffer) {
-                buffer = {};
-            }
-            asyncLoop(newItemsRange.length, function iterationFunction (loop) {
-                // prep articles for insertion
-                var index = loop.iterration();
-                apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
-                    buffer[ newItemsRange[index] ] = body;
-                    console.log('processed article: ' + body);
-
-                    // important: must be in the callback
-                    // next iteration
-                    loop.next();
-                });
-            },
-            function loopEndCallback () {
-                // load articles in DB
-                localStorage.storeInLocal('items', buffer);
-                console.log('stored buffer: ' + JSON.stringify(buffer));
-                // clearing buffer
-                buffer = null;
-                newItemsRange = null;
-
-                // send post request to notify-server so he can process new data
-                sendSignalToNotifier();
-
-                // listen for new changes from the API again
-                mainLoop();
-            });
-        }
-    });
+function processItems () {
+    //set up localStorage and then start the loop
+    init(afterSetup);
 
     // if for some reason our newItemsRange hasn't change try to check for changes
-    // after 3 minutes
+    // after 3 seconds
     mainLoop();
 }
 
@@ -67,6 +36,45 @@ function init (callback) {
         }
         callback();
     })
+}
+
+function afterSetup () {
+    if(!!newItemsRange && newItemsRange.length !== 0) { // if we have new entries, iterate through them
+        if(!buffer) {
+            buffer = {};
+        }
+        var rangeLength = newItemsRange.length;
+        asyncLoop(rangeLength, iterationFunction, loopEndCallback);
+    }
+}
+
+function iterationFunction (loop) {
+    // prep articles for insertion
+    var index = loop.iterration();
+    apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
+        if(!!newItemsRange[index]) {
+            buffer[ newItemsRange[index] ] = body;
+            console.log('processed article: ' + body);
+        }
+        // important: must be in the callback
+        // next iteration
+        loop.next();
+    });
+}
+
+function loopEndCallback () {
+    // load articles in DB
+    localStorage.storeInLocal('items', buffer);
+    console.log('stored buffer: ' + JSON.stringify(buffer));
+    // clearing buffer
+    buffer = null;
+    newItemsRange = null;
+
+    // send post request to notify-server so he can process new data
+    sendSignalToNotifier();
+
+    // listen for new changes from the API again
+    mainLoop();
 }
 
 function sendSignalToNotifier () {
