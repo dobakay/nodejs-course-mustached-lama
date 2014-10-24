@@ -1,3 +1,6 @@
+'use strict';
+var rootConfig = require('../config');
+var requestMod = require('request');
 var apiCalls = require('./api-calls');
 var localStorage = require('./localstorage');
 
@@ -38,6 +41,9 @@ function processArticles () {
                 buffer = null;
                 newItemsRange = null;
 
+                // send post request to notify-server so he can process new data
+                sendSignalToNotifier();
+
                 // listen for new changes from the API again
                 mainLoop();
             });
@@ -61,6 +67,20 @@ function init (callback) {
         }
         callback();
     })
+}
+
+function sendSignalToNotifier () {
+    requestMod({
+        uri: rootConfig.notifierUrl + rootConfig.notifierUpdateUrl,
+        method: "POST",
+    }, function (error, response, body) {
+        if(error) {
+            console.log(error);
+        }
+        else {
+            console.log(response);
+        }
+    });
 }
 
 function createNewItemsRange (lastItemId, newItemId) {
