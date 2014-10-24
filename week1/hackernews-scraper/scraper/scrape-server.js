@@ -91,7 +91,7 @@ function iterationFunction (loop) {
     var index = loop.iterration();
     apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
         if(!!newItemsRange[index]) {
-            buffer[ newItemsRange[index] ] = body;
+            buffer[ newItemsRange[index] ] = JSON.parse(body);
             console.log('processed article: ' + body);
         }
         // important: must be in the callback
