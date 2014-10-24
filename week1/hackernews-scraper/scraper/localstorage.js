@@ -8,7 +8,7 @@ var localStorage = (function() {
     var maxItem = null;
 
     localStorage.loadFromLocal = function () {
-        articles = storage.getItem('articles');
+        articles = storage.getItem('items');
         maxItem = storage.getItem('maxItem');
 
         if(!articles) {
@@ -27,7 +27,7 @@ var localStorage = (function() {
         storage.initSync({
             // getting out of node_module directory
             // and creating a file in the hackernews folder
-            dir:'../../../persist',
+            dir:'../../../../persist',
             stringify: JSON.stringify,
             parse: JSON.parse,
             encoding: 'utf8',

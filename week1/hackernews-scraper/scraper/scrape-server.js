@@ -1,9 +1,9 @@
 var apiCalls = require('./api-calls');
 var localStorage = require('./localstorage');
 
-var lastNewArticleId = localStorage.maxItem;
-var newArticlesRange = null;
-var articleBuffer = null;
+var lastNewItemId = localStorage.maxItem;
+var newItemsRange = null;
+var buffer = null;
 
 function mainLoop () {
     setTimeout(function () {
@@ -14,15 +14,15 @@ mainLoop();
 
 function processArticles () {
     init(function afterSetup () {
-        if(!!newArticlesRange && newArticlesRange.length !== 0) { // if we have new entries, iterate through them
-            if(!articleBuffer) {
-                articleBuffer = {};
+        if(!!newItemsRange && newItemsRange.length !== 0) { // if we have new entries, iterate through them
+            if(!buffer) {
+                buffer = {};
             }
-            asyncLoop(newArticlesRange.length, function iterationFunction (loop) {
+            asyncLoop(newItemsRange.length, function iterationFunction (loop) {
                 // prep articles for insertion
                 var index = loop.iterration();
-                apiCalls.getArticle(newArticlesRange[index], function processArticle (err, response, body) {
-                    articleBuffer[ newArticlesRange[index] ] = body;
+                apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
+                    buffer[ newItemsRange[index] ] = body;
                     console.log('processed article: ' + body);
 
                     // important: must be in the callback
@@ -32,11 +32,11 @@ function processArticles () {
             },
             function loopEndCallback () {
                 // load articles in DB
-                localStorage.storeInLocal('articles', articleBuffer);
-                console.log('stored buffer: ' + JSON.stringify(articleBuffer));
+                localStorage.storeInLocal('items', buffer);
+                console.log('stored buffer: ' + JSON.stringify(buffer));
                 // clearing buffer
-                articleBuffer = null;
-                newArticlesRange = null;
+                buffer = null;
+                newItemsRange = null;
 
                 // listen for new changes from the API again
                 mainLoop();
@@ -44,29 +44,29 @@ function processArticles () {
         }
     });
 
-    // if for some reason our newArticlesRange hasn't change try to check for changes
+    // if for some reason our newItemsRange hasn't change try to check for changes
     // after 3 minutes
     mainLoop();
 }
 
 function init (callback) {
     apiCalls.getMaxItem(function setMaxItem(error, response, body) {
-        if(lastNewArticleId === null) {
-            lastNewArticleId = body;
+        if(lastNewItemId === null) {
+            lastNewItemId = body;
         }
         else {
             localStorage.storeInLocal('maxItem', body);
-            newArticlesRange = createNewArticlesRange(lastNewArticleId, body);
-            lastNewArticleId = body;
+            newItemsRange = createNewItemsRange(lastNewItemId, body);
+            lastNewItemId = body;
         }
         callback();
     })
 }
 
-function createNewArticlesRange (lastArticleId, newArticleId) {
+function createNewItemsRange (lastItemId, newItemId) {
     var result = [];
-    var start = parseInt(lastArticleId);
-    var end = parseInt(newArticleId);
+    var start = parseInt(lastItemId);
+    var end = parseInt(newItemId);
 
     for (var i = start; i < end; i++) {
         result.push(i);
