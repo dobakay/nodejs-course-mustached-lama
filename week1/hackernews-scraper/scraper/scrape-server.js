@@ -44,60 +44,28 @@ function afterSetup () {
             buffer = {};
         }
         var rangeLength = newItemsRange.length;
-        asyncLoop(rangeLength, iterationFunction, loopEndCallback);
+        // asyncLoopWithObject(rangeLength, iterationFunction, loopEndCallback);
+        asyncLoop(0, rangeLength, iteration, loopEndCallback);
     }
 }
 
-/**
- * Asynchronous loop function for iterably executing asynchronous functions
- * @param  {int}   iterations how many cycles there are in the loop
- * @param  {Function}   func       the asynchronous function, takes a 'loop' parameter
- *                                 (a deffered object for asynchrous controlling, which has
- *                                  a 'next' method called every iterration after async function is executed)
- * @param  {Function} callback   function that executes always at the end of the loop
- * @return {[type]}              [description]
- */
-function asyncLoop (iterations, func, callback) {
-    var index = 0;
-    var done = false;
-    var loop = {
-        next: function () {
-            if(done) {
-                return;
-            }
-            if(index < iterations) {
-                func(loop);
-                index++;
-            }
-            else {
-                done = true;
-                callback();
-            }
-        },
-        iterration: function () {
-            return index;
-        },
-        break: function () {
-            done = true;
-            callback();
-        }
-    };
-    loop.next();
-    return loop;
+function asyncLoop (currentIndex, endIndex, iterrationCallback, doneCallback) {
+    if(currentIndex === endIndex) {
+        return doneCallback();
+    }
+    iterrationCallback(currentIndex, function () {
+        asyncLoop(++currentIndex, endIndex, iterrationCallback, doneCallback);
+    });
 }
 
-function iterationFunction (loop) {
-    // prep articles for insertion
-    var index = loop.iterration();
-    apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
-        if(!!newItemsRange[index]) {
+function iteration (index, callback) {
+    if(!!newItemsRange && !!newItemsRange[index]) {
+        apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
             buffer[ newItemsRange[index] ] = JSON.parse(body);
             console.log('processed article: ' + body);
-        }
-        // important: must be in the callback
-        // next iteration
-        loop.next();
-    });
+            callback();
+        });
+    }
 }
 
 function loopEndCallback () {
@@ -141,3 +109,59 @@ function createNewItemsRange (lastItemId, newItemId) {
 }
 
 
+//////////////////////////////////////////////
+// ASYNC LOOP WITH OBJECT Func Realisations //
+//////////////////////////////////////////////
+
+/**
+ * Asynchronous loop function for iterably executing asynchronous functions
+ * @param  {int}   iterations how many cycles there are in the loop
+ * @param  {Function}   func       the asynchronous function, takes a 'loop' parameter
+ *                                 (a deffered object for asynchrous controlling, which has
+ *                                  a 'next' method called every iterration after async function is executed)
+ * @param  {Function} callback   function that executes always at the end of the loop
+ * @return {[type]}              [description]
+ */
+function asyncLoopWithObject (iterations, func, callback) {
+    var index = 0;
+    var done = false;
+    var loop = {
+        next: function () {
+            if(done) {
+                return;
+            }
+            if(index < iterations) {
+                func(loop);
+                index++;
+            }
+            else {
+                done = true;
+                callback();
+            }
+        },
+        iterration: function () {
+            return index;
+        },
+        break: function () {
+            done = true;
+            callback();
+        }
+    };
+    loop.next();
+    return loop;
+}
+
+
+function iterationFunction (loop) {
+    // prep articles for insertion
+    var index = loop.iterration();
+    if(!!newItemsRange && !!newItemsRange[index]) {
+        apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
+            buffer[ newItemsRange[index] ] = JSON.parse(body);
+            console.log('processed article: ' + body);
+            // important: must be in the callback
+            // next iteration
+            loop.next();
+        });
+    }
+}
