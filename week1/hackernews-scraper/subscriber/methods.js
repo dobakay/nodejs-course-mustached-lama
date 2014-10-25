@@ -1,42 +1,12 @@
 var methods = (function() {
     'use strict';
     var generatekey = require('generate-key');
-    var storage = require('node-persist');
+    var localStorage = require('../localStorage.js');
 
     var methods = {};
-    var subs = null;
+    var subs = localStorage.subscribers;
 
-    (function init () {
-        storage.initSync({
-            // getting out of node_module directory
-            // and creating a file in the hackernews folder
-            dir:'../../../persist',
-            stringify: JSON.stringify,
-            parse: JSON.parse,
-            encoding: 'utf8',
-            logging: false,  // can also be custom logging function
-            continuous: true,
-            interval: false
-        });
-        loadFromLocal();
-    })();
-
-    function loadFromLocal () {
-        subs = storage.getItem('subs');
-
-        if(!subs) {
-            subs = {}
-        }
-        else {
-            subs = subs;
-        }
-    }
-
-    function storeInLocal (newJsonState) {
-        storage.setItem('subscribers', newJsonState);
-    }
-
-    methods.subscribeUser = function(userMail, keywords) {
+    methods.subscribeUser = function(userMail, keywords, notificationType) {
         var userId = generatekey.generateKey();
         var keyWordsSetId = generatekey.generateKey();
 
@@ -49,12 +19,12 @@ var methods = (function() {
                 email: userMail,
                 keyWordsSets: {
                     keyWordsSetId: keywords
-                }
+                },
+                type: notificationType
             }
         }
 
-        // storing in localStorage the newSubsState
-        storeInLocal(subs);
+        localStorage.storeInLocal('subscribers', subs);
 
         return {
             email: userMail,
@@ -72,7 +42,7 @@ var methods = (function() {
         else {
             delete subs[subscriberId];
 
-            storeInLocal(subs);
+            localStorage.storeInLocal('subscribers', subs);
 
             return true;
         }

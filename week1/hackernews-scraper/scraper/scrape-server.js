@@ -2,7 +2,7 @@
 var rootConfig = require('../config');
 var requestMod = require('request');
 var apiCalls = require('./api-calls');
-var localStorage = require('./localstorage');
+var localStorage = require('../localStorage.js');
 
 var lastNewItemId = localStorage.maxItem;
 var newItemsRange = null;
@@ -77,7 +77,7 @@ function loopEndCallback () {
     newItemsRange = null;
 
     // send post request to notify-server so he can process new data
-    sendSignalToNotifier();
+    // sendSignalToNotifier();
 
     // listen for new changes from the API again
     mainLoop();

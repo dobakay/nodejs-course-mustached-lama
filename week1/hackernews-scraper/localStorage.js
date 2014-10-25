@@ -4,18 +4,21 @@ var localStorage = (function() {
 
 
     var localStorage = {};
-    var articles = null;
+    var items = null;
     var maxItem = null;
+    var subscribers = null;
 
     localStorage.loadFromLocal = function () {
-        articles = storage.getItem('items');
+        items = storage.getItem('items');
         maxItem = storage.getItem('maxItem');
+        subscribers = storage.getItem('subscribers')
 
-        if(!articles) {
-            articles = {}
+        if(!items) {
+            items = {}
         }
-        else {
-            articles = articles;
+
+        if(!subscribers) {
+            subscribers = {};
         }
     }
 
@@ -27,7 +30,7 @@ var localStorage = (function() {
         storage.initSync({
             // getting out of node_module directory
             // and creating a file in the hackernews folder
-            dir:'../../../../persist',
+            dir:'../../persist',
             stringify: JSON.stringify,
             parse: JSON.parse,
             encoding: 'utf8',
@@ -36,8 +39,9 @@ var localStorage = (function() {
             interval: false
         });
         localStorage.loadFromLocal();
-        localStorage.articles = articles;
+        localStorage.items = items;
         localStorage.maxItem = maxItem;
+        localStorage.subscribers = subscribers;
     };
 
     localStorage.init();
