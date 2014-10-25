@@ -2,8 +2,24 @@
     'use strict';
 
     var localStorage = require('../localStorage');
+    var hnItems = localStorage.items; // hacker news items from API
 
     var comparer = {};
+
+    function filterItemsByType (type) {
+        var result = hnItems.filter(function (item) {
+            return item.type === type;
+        });
+        return result;
+    }
+
+    function filterNewItemsByUserPreferences (userTypePreferences) {
+        var filtered = {};
+        for (var i = 0; i < userTypePreferences.length; i++) {
+            filtered[userTypePreferences[i]] = filterItemsByType(userTypePreferences[i])
+        }
+        return filtered;
+    }
 
     function getUserSets (id) {
         return localStorage.subscribers[id].keyWordsSets;
