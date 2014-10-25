@@ -26,6 +26,8 @@ function processItems () {
 
 function init (callback) {
     apiCalls.getMaxItem(function setMaxItem(error, response, body) {
+        body = parseInt(body);
+
         if(lastNewItemId === null) {
             lastNewItemId = body;
         }
@@ -41,7 +43,7 @@ function init (callback) {
 function afterSetup () {
     if(!!newItemsRange && newItemsRange.length !== 0) { // if we have new entries, iterate through them
         if(!buffer) {
-            buffer = {};
+            buffer = [];
         }
         var rangeLength = newItemsRange.length;
         // asyncLoopWithObject(rangeLength, iterationFunction, loopEndCallback);
@@ -61,8 +63,8 @@ function asyncLoop (currentIndex, endIndex, iterrationCallback, doneCallback) {
 function iteration (index, callback) {
     if(!!newItemsRange && !!newItemsRange[index]) {
         apiCalls.getArticle(newItemsRange[index], function processArticle (err, response, body) {
-            buffer[ newItemsRange[index] ] = JSON.parse(body);
-            console.log('processed article: ' + body);
+            buffer.push(JSON.parse(body));
+            console.log('processed item: ' + body);
             callback();
         });
     }
@@ -77,7 +79,7 @@ function loopEndCallback () {
     newItemsRange = null;
 
     // send post request to notify-server so he can process new data
-    // sendSignalToNotifier();
+    sendSignalToNotifier();
 
     // listen for new changes from the API again
     mainLoop();
