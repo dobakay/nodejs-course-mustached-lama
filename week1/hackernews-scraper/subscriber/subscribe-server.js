@@ -1,4 +1,4 @@
-'use strikt';
+'use strict';
 var express = require('express');
 var bodyparser = require('body-parser');
 var methods = require('./methods');
@@ -7,7 +7,6 @@ var app = express();
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
-
 
 app.post('/subscribe', function (request, response) {
     var data = request.body;

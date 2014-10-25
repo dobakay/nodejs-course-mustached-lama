@@ -1,4 +1,4 @@
-var comparer = (function() {
+ comparer = (function() {
     'use strict';
 
     var storage = require('node-persist');
@@ -50,17 +50,18 @@ var comparer = (function() {
         for(var key in collection) {
             collection[key].email = subs[key].email;
         }
+        console.log(collection);
         return collection;
     }
 
-    function notifySubscribers () {
+    comparer.notifySubscribers = function () {
         var collection = generateInterestedSubs();
         collection = attachMails(collection);
         // TODO: send mails by SMTP using collections
     }
 
-    (function init () {
-        comparer.initSync({
+    function init () {
+        storage.initSync({
             dir:'../../../persist',
             stringify: JSON.stringify,
             parse: JSON.parse,
@@ -71,7 +72,8 @@ var comparer = (function() {
         });
         subs = loadFromLocal('subs');
         articles = loadFromLocal('articles');
-    })();
+    };
+    init();
 
     return comparer;
 

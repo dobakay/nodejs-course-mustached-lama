@@ -1,9 +1,8 @@
 {
-    "notifierUrl": "http://localhost.com:9000",
+    "notifierUrl": "http://localhost:9000",
     "notifierUpdateUrl": "/newArticles",
-    "subscriberUrl": "http://localhost.com:8000",
+    "subscriberUrl": "http://localhost:8000",
     "subscriberSubscribeUrl": "/subscribe",
     "subscriberUnsubscribeUrl": "/unsubscribe",
-    "subscriberListSubscribersUrl": "/listSubscribers",
-    "scraperUrl": ""
+    "subscriberListSubscribersUrl": "/listSubscribers"
 }

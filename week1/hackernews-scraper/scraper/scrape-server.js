@@ -86,13 +86,13 @@ function loopEndCallback () {
 function sendSignalToNotifier () {
     requestMod({
         uri: rootConfig.notifierUrl + rootConfig.notifierUpdateUrl,
-        method: "POST",
+        method: "GET",
     }, function (error, response, body) {
         if(error) {
             console.log(error);
         }
         else {
-            console.log(response);
+            console.log('notifier notified');
         }
     });
 }
