@@ -12,8 +12,8 @@ app.post('/subscribe', function (request, response) {
     var data = request.body;
 
     var result = methods.subscribeUser(data.email, data.keywords, data.type);
-    console.log(data);
     response.json(result);
+    response.end();
 });
 
 app.post('/unsubscribe', function (request, response) {
