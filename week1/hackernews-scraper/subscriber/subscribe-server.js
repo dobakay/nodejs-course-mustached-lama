@@ -13,7 +13,6 @@ app.post('/subscribe', function (request, response) {
 
     var result = methods.subscribeUser(data.email, data.keywords, data.type);
     response.json(result);
-    response.end();
 });
 
 app.post('/unsubscribe', function (request, response) {
