@@ -25,7 +25,7 @@
 
     function getItemsByUserPreferences (user) {
         var filteredByTypeItems = getItemsByUserTypePreferences(user.type);
-        console.log('items by type: ' + JSON.stringify(filteredByTypeItems));
+        // console.log('items by type: ' + JSON.stringify(filteredByTypeItems));
         var filteredByKeySetItems = getItemsByUserKeyWordsPreferences(user,filteredByTypeItems);
         // console.log('items by type: ' + JSON.stringify(filteredByTypeItems));
         return filteredByKeySetItems;
@@ -46,7 +46,7 @@
             for (var itemIndex = 0; itemIndex < items[type].length; itemIndex++) {
                 itemKeywordsMatchIndexes = checkItemKeywordSets(items[type][itemIndex], user);
                 if(itemKeywordsMatchIndexes.length !== 0) {
-                    console.log(JSON.parse(itemKeywordsMatchIndexes));
+                    // console.log(JSON.stringify(itemKeywordsMatchIndexes));
                     if(!filteredItems[type]) {
                         filteredItems[type] = [];
                     }
@@ -67,9 +67,9 @@
 
     function checkItemKeywordSets (item, user) {
         var keywordSetIndexes = [];
-        for (var i = 0; i < user.keyWordsSets.length; i++) {
-            if(itemContainsKeywords(item, user.keyWordsSets[i])) {
-                keywordSetIndexes.push(i);
+        for (var wordsetKey in user.keyWordsSets) {
+            if(itemContainsKeywords(item, user.keyWordsSets[wordsetKey])) {
+                keywordSetIndexes.push(wordsetKey);
             }
         }
         return keywordSetIndexes;
