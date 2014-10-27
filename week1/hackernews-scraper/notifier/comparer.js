@@ -19,13 +19,15 @@
 
         for (var subKey in subscribers) {
             userItemsMatches[subKey] = getItemsByUserPreferences(subscribers[subKey]);
-            // send mails via another module
         }
+        return userItemsMatches;
     }
 
     function getItemsByUserPreferences (user) {
         var filteredByTypeItems = getItemsByUserTypePreferences(user.type);
+        console.log('items by type: ' + JSON.stringify(filteredByTypeItems));
         var filteredByKeySetItems = getItemsByUserKeyWordsPreferences(user,filteredByTypeItems);
+        // console.log('items by type: ' + JSON.stringify(filteredByTypeItems));
         return filteredByKeySetItems;
     }
 
@@ -43,13 +45,14 @@
         for (var type in items) {
             for (var itemIndex = 0; itemIndex < items[type].length; itemIndex++) {
                 itemKeywordsMatchIndexes = checkItemKeywordSets(items[type][itemIndex], user);
-                if(itemKeywordsMatchIndexes) {
+                if(itemKeywordsMatchIndexes.length !== 0) {
+                    console.log(JSON.parse(itemKeywordsMatchIndexes));
                     if(!filteredItems[type]) {
                         filteredItems[type] = [];
                     }
                     filteredItems[type].push({
                         matchedUser: user,
-                        matchedItem: item,
+                        matchedItem: items[type][itemIndex],
                         matchIndexes: itemKeywordsMatchIndexes
                     });
                     // important: it's possible we fill our matches with with empty matchIndex arrays
@@ -74,8 +77,9 @@
 
     function itemContainsKeywords (item, kewordsSet) {
         var fieldToCheck = (item.type === 'comment')? 'text': 'title';
+        var fieldValue = item[fieldToCheck].toLowerCase();
         for (var i = 0; i < kewordsSet.length; i++) {
-            if(item[fieldToCheck].indexOf(kewordsSet[i]) !== -1) {
+            if(fieldValue.indexOf(kewordsSet[i].toLowerCase()) !== -1) {
                 return true;
             }
         }
@@ -90,8 +94,8 @@
     }
 
     comparer.notifySubscribers = function () {
-        var collection = generateInterestedSubs();
-        collection = attachMails(collection);
+        var collection = generateFeedList();
+        console.log('FINALL RESULT: '+JSON.stringify(collection));
         // TODO: send mails by SMTP using collections
     }
 
