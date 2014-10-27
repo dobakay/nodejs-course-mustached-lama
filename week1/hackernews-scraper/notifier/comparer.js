@@ -1,4 +1,4 @@
- comparer = (function() {
+var comparer = (function() {
     'use strict';
 
     var localStorage = require('../localStorage');
@@ -18,7 +18,8 @@
         var userItemsMatches = {};
 
         for (var subKey in subscribers) {
-            userItemsMatches[subKey] = getItemsByUserPreferences(subscribers[subKey]);
+            userItemsMatches[subKey].matches = getItemsByUserPreferences(subscribers[subKey]);
+            userItemsMatches[subKey].user = subscribers[subKey];
         }
         return userItemsMatches;
     }
@@ -51,7 +52,6 @@
                         filteredItems[type] = [];
                     }
                     filteredItems[type].push({
-                        matchedUser: user,
                         matchedItem: items[type][itemIndex],
                         matchIndexes: itemKeywordsMatchIndexes
                     });
