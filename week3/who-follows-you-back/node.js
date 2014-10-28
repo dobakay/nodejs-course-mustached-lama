@@ -20,19 +20,28 @@ Node.prototype.getNeighbours = function () {
 }
 
 Node.prototype.setName = function (newName) {
+    if(typeof newName !== 'string') {
+        throw new NodeException('NewName parameter is not a string.');
+    }
     this._name = newName;
 }
 
 Node.prototype.addNeighbour = function (neighbourName) {
+    if(typeof neighbourName !== 'string') {
+        throw new NodeException('NeighbourName parameter is not a string.');
+    }
     this._neighbours.push(neighbourName);
 }
 
 Node.prototype.removeNeighbour = function (neighbourName) {
+    if(typeof neighbourName !== 'string') {
+        throw new NodeException('NeighbourName parameter is not a string.');
+    }
     var neighbourIndex = this._neighbours.indexOf(neighbourName);
     if(neighbourIndex === -1) {
-        // Throw exception
+        throw new NodeException('Neighbour name does not exists.');
     }
-    this._neighbours.splice(neighbourIndex, 0);
+    this._neighbours.splice(neighbourIndex, 1);
 }
 
 module.exports = Node;
