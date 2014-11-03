@@ -49,6 +49,9 @@ function afterSetup () {
         // asyncLoopWithObject(rangeLength, iterationFunction, loopEndCallback);
         asyncLoop(0, rangeLength, iteration, loopEndCallback);
     }
+
+    // if the range is empty we can issue a new request to the api immediately
+    mainLoop();
 }
 
 function asyncLoop (currentIndex, endIndex, iterrationCallback, doneCallback) {
