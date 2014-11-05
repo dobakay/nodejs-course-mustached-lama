@@ -18,6 +18,7 @@ var comparer = (function() {
         var userItemsMatches = {};
 
         for (var subKey in subscribers) {
+            userItemsMatches[subKey] = {};
             userItemsMatches[subKey].matches = getItemsByUserPreferences(subscribers[subKey]);
             userItemsMatches[subKey].user = subscribers[subKey];
         }
@@ -96,7 +97,7 @@ var comparer = (function() {
     comparer.notifySubscribers = function () {
         var collection = generateFeedList();
         console.log('FINALL RESULT: '+JSON.stringify(collection));
-        // TODO: send mails by SMTP using collections
+        return collection;
     }
 
     return comparer;

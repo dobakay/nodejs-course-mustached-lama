@@ -1,45 +1,42 @@
 var mailer = (function() {
     'use strict';
     var nodemailer = require('nodemailer');
+    var config = require('./mail_config');
 
-    // create reusable transporter object using SMTP transport
-    var transporter = nodemailer.createTransport({
-        service: 'Gmail',
+    var mailer = {};
+
+    var transporter = nodemailer.createTransport("SMTP", {
+        service: "Gmail",
         auth: {
-            user: 'gmail.user@gmail.com',
-            pass: 'userpass'
+            XOAuth2: {
+                user: config.clientAddress,
+                clientId: config.clientId,
+                clientSecret: config.clientSecret,
+                refreshToken: config.refreshToken
+            }
         }
     });
 
-    // NB! No need to recreate the transporter object. You can use
-    // the same transporter object for all e-mails
-
-    // setup e-mail data with unicode symbols
     var mailOptions = {
-        from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
-        to: 'bar@blurdybloop.com, baz@blurdybloop.com', // list of receivers
-        subject: 'Hello ✔', // Subject line
+        from: 'Dobata ✔ <' + config.clientAddress + '>', // sender address
+        to: config.clientAddress, // list of receivers
+        subject: 'HN Scrape Sir ✔', // Subject line
         text: 'Hello world ✔', // plaintext body
         html: '<b>Hello world ✔</b>' // html body
     };
 
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, function(error, info){
-        if(error){
-            console.log(error);
-        }else{
-            console.log('Message sent: ' + info.response);
-        }
-    });
-
-
-    function composeMails (mailCollection) {
-        for (var key in mailCollection) {
-            mailCollection[key]
+    mailer.mail = function (matchesWithMails) {
+        for (var key in matchesWithMails) {
+            mailOptions.html = matchesWithMails[key].mailContent.html;
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    console.log(error);
+                }else{
+                    console.log('Message sent: ' + info.response);
+                }
+            });
         }
     }
-
-    var mailer = {};
 
     return mailer;
 
