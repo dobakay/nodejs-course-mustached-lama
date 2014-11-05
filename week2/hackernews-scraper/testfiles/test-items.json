@@ -1,0 +1,63 @@
+[
+  {
+    "by": "CodeAndSec",
+    "id": 8508734,
+    "score": 19,
+    "text": "",
+    "time": 1414257143,
+    "title": "CVE-2014-4113 Patch and Vulnerability Analysis",
+    "type": "story",
+    "url": "https://www.codeandsec.com/CVE-2014-4113-Detailed-Vulnerability-and-Patch-Analysis"
+  },
+  {
+    "by": "escape_goat",
+    "id": 8508735,
+    "kids": [
+      8508772
+    ],
+    "parent": 8508389,
+    "text": "Moment by moment, the writing is quite decent, but I had to look hard to find anything of substance here.  The fundamental &#x27;conceit&#x27; [technical term] of the essay is incredibly well-worn, and it is surprising to see it reproduced here so uncritically.  There is one substantive and interesting claim, based on research by two scientists named Wayne Gray and Wai-Tat Fu:  “externalized knowledge is accessed like any other memory, and that we treat ‘memories’ on a computer screen just like memories in our head.”  This is joined to the suggestion from Edwin Hutchins that the ‘cognitive task’ of navigation at sea was socially distributed across “several people, charts, papers, clocks, and a variety of physical instruments.”  As ships in truth use GPS, and used radio beacons before then, and as in truth a single man with a map, a compass and sextant can <i>roughly</i> determine the position of a ship at sea, this sounds suspiciously like a thesis that is picking and choosing its own Scotsmen.  What exactly makes a distributed task be <i>cognitive</i> rather than, say, a computation?  I do not think that this is answered, and it seems that the entire idea never gets beyond an “A implies B, C implies B, therefore A is C” fallacy.<p>Anyway, what excites the author is the idea that this external cognitive process extends seamlessly into the internal cognitive process by way of the aforementioned findings about externalized knowledge.  There is no real notion beyond that.  He believes that as the city population grows larger and denser, the “genius” of the metaphorical city mind will increase;  he cites strong evidence that this is true, but he attributes the solved logistics and communications of a large city to that genius, no matter that a mind is capable of no similar thing.  If “people are to cities as neurons are to brains,” and based on the power-law scaling he mentions, he logically ought to end with the fear that all large cities will be eventually destroyed by massive epileptic cascades.  Instead, he does the usual soft-shoe across different scales and concepts to freshen up an old and familiar imagination of science.<p>I have no idea why this is about San Francisco, although the golden gate bridge is quite obviously a corpus callosum.",
+    "time": 1414257159,
+    "type": "comment"
+  },
+  {
+    "by": "ajanuary",
+    "id": 8517643,
+    "parent": 8515760,
+    "text": "Yes, it&#x27;s a valid URI but &#x2F;&#x2F;robots.txt is different resource to &#x2F;robots.txt. It seems thttpd is probay doing the right thing.",
+    "time": 1414438301,
+    "type": "comment"
+  },
+  {
+    "by": "wpaprocki",
+    "id": 8517644,
+    "parent": 8517267,
+    "text": "I&#x27;m getting an error message. Stupid app!<p>...So did my rating just go up?",
+    "time": 1414438303,
+    "type": "comment"
+  },
+  {
+    "by": "robomartin",
+    "id": 8517645,
+    "parent": 8517028,
+    "text": "Let me guess.  You are 15 years old and just ditched school to screw around on HN.  Right?",
+    "time": 1414438303,
+    "type": "comment"
+  },
+  {
+    "by": "qeorge",
+    "id": 8517650,
+    "parent": 8517516,
+    "text": "Same story here. Have had T-Mo for ~3 years, wouldn&#x27;t ever switch to one of the other big carriers (I would move to Republic Wireless if I was going to change).<p>Coverage is fine. Sometimes on road trips to the beach here in North Carolina I will lose service for say 5-10 miles when we are really in the middle of nowhere. This is acceptable to me in return for nearly 50% savings and not having to do business with At&amp;T&#x2F;Verizon.",
+    "time": 1414438330,
+    "type": "comment"
+  },
+  {
+    "by": "kevincennis",
+    "id": 8517651,
+    "parent": 8515185,
+    "text": "It&#x27;d be nice to know in exactly what capacity this was discussed.<p>The article just says that &quot;architects, developers, real estate experts and business owners were brought together in May to discuss ways of preserving the city&#x27;s buildings in this watery cityscape of the future&quot;.<p>Who set this up? Were canals a serious suggestion with a reasonable amount of support, or just thrown out as a possibility during a brainstorming-type exercise?",
+    "time": 1414438339,
+    "type": "comment"
+  }
+]

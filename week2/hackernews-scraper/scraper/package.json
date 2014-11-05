@@ -1,0 +1,16 @@
+{
+  "name": "scraper",
+  "version": "0.0.0",
+  "description": "",
+  "main": "scrape-methods.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "generate-key": "0.0.6",
+    "node-persist": "0.0.2",
+    "request": "~2.45.0"
+  }
+}

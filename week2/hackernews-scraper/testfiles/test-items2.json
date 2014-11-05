@@ -1,0 +1,88 @@
+[
+  {
+    "by": "bayonetz",
+    "id": 8517848,
+    "parent": 8517782,
+    "text": "It should be available.  My dev phones are U.S. based and I didn&#x27;t know how to test&#x2F;verify it running on a non U.S phone.  Any ideas out there?",
+    "time": 1414440295,
+    "type": "comment"
+  },
+  {
+    "by": "dgacmu",
+    "id": 8517851,
+    "parent": 8517667,
+    "text": "But the first company to crack getting HR affordably and reliably without a separate strap?  Take my money!  A watch that can do it well - in rain, freezing weather, with salty sweat, or sunshine - would be incredibly cool.  The strap is by far the weakest link of Garmin and Polar watches.",
+    "time": 1414440328,
+    "type": "comment"
+  },
+  {
+    "by": "dantiberian",
+    "id": 8517853,
+    "parent": 8515193,
+    "text": "This goes double if you&#x27;re hosting on Heroku as you won&#x27;t be able to correlate the changes Heroku makes with issues showing up for you. They&#x27;re lucky that they hadn&#x27;t pushed a change at the same time as Cowboy changed, or the debugging could have taken even longer.",
+    "time": 1414440358,
+    "type": "comment"
+  },
+  {
+    "by": "ottot",
+    "id": 8517855,
+    "score": 1,
+    "text": "",
+    "time": 1414440380,
+    "title": "How a Band of Rebels and Pioneers Launched WIRED’s First Website 20 Years Ago",
+    "type": "story",
+    "url": "http://www.wired.com/2014/10/wired-hotwired-anniversary"
+  },
+  {
+    "by": "dthal",
+    "id": 8517857,
+    "score": 1,
+    "text": "",
+    "time": 1414440415,
+    "title": "Spritz: A New RC4-Like Stream Cipher",
+    "type": "story",
+    "url": "https://www.schneier.com/blog/archives/2014/10/spritz_a_new_rc.html"
+  },
+  {
+    "by": "ecdavis",
+    "id": 8517859,
+    "parent": 8517822,
+    "text": "&gt; I can very easily see that being fraudulently exploited, or just plain misunderstood by new immigrants.<p>Particularly when you&#x27;re getting letters in the mail urging you to vote and telling you how. I&#x27;ve been getting a lot of those recently.",
+    "time": 1414440458,
+    "type": "comment"
+  },
+  {
+    "by": "brighton36",
+    "id": 8517865,
+    "parent": 8517837,
+    "text": "There never was one, which is the point. Compuserve had a weird compiled binary format. AOL had a similarly weird proprietary format, Prodigy was a vector based system that could never work with anyone else, and there were countless others (Genie, etc). Meanwhile, HTML came along over PPP, and that&#x27;s when the entirety of corporate america, and residential dial-up users joined the network. The same thing is happening now with the mobile payments industry.",
+    "time": 1414440479,
+    "type": "comment"
+  },
+  {
+    "by": "NathanKP",
+    "id": 8517868,
+    "parent": 8517661,
+    "text": "One possible fix would be to only allow an account to bind to a device ID if that device ID wasn&#x27;t already linked to another account. This would prevent you from just fishing through their info by linking your account to random device ID&#x27;s.<p>You&#x27;d have to know the email address associated with the account, but that of course means you are using the device ID as the username and the email address as the &quot;password&quot;, which is still pretty bad in my opinion.",
+    "time": 1414440514,
+    "type": "comment"
+  },
+  {
+    "by": "ef4",
+    "id": 8517869,
+    "parent": 8517686,
+    "text": "I don&#x27;t think a well-managed software company should keep everyone 100% allocated to their primary function. It&#x27;s too brittle and it leaves too many potentially game-changing ideas unexplored.<p>I would be happy to work at a company where everyone spends 10% of their time on skunkworks-type projects, or cross-training in a totally different part of the organization, and that would include the CTO sometimes writing code.<p>(Obviously little startups don&#x27;t have this luxury, but in those cases the CTO is justified in coding anyway.)",
+    "time": 1414440525,
+    "type": "comment"
+  },
+  {
+    "by": "boxcardavin",
+    "id": 8517872,
+    "score": 1,
+    "text": "I&#x27;m an imposing 6&#x27;4&quot; and 230lbs but an arthritis-like condition has left me with a damaged right hand and wrist. Shaking hands causes mild to severe pain, and my size tends to invite joint damaging handshakes from a lot of alpha males. As a result, I resort to fist bumps and left handshakes that often take some explaining. Have any other founders faced similar problems?<p>Any creative handshake ideas are appreciated. High fives are hit and miss with the over 50 crowd!",
+    "time": 1414440542,
+    "title": "Ask HN: Have founders spoken about disabilities affecting business interactions?",
+    "type": "story",
+    "url": ""
+  }
+]
