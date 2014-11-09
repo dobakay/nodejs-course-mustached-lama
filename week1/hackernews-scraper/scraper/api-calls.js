@@ -14,17 +14,6 @@ var calls = (function() {
 
     var calls = {};
 
-    calls.testConnectivity = function () {
-        requestMod( hn.apiUrl, function (error, response, html) {
-            if (!error && response.statusCode === 200) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        });
-    }
-
     calls.getArticle = function (articleId, callback) {
         requestMod({
             uri: hn.item.replace('{{id}}', articleId),
@@ -52,7 +41,7 @@ var calls = (function() {
         });
     }
 
-    calls.getUpdates =function (callback) {
+    calls.getUpdates = function (callback) {
         requestMod({
             uri: hn.updates,
             method: "GET",
