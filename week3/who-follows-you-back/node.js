@@ -1,5 +1,4 @@
 'use strict';
-// TODO: add node factory
 
 function NodeException (message) {
     this.message = message;
@@ -42,6 +41,17 @@ Node.prototype.removeNeighbour = function (neighbourName) {
         throw new NodeException('Neighbour name does not exists.');
     }
     this._neighbours.splice(neighbourIndex, 1);
+}
+
+// Attaching static factory method
+Node.createNodes = function (rawNodesArray) {
+    var result = [];
+    for (var i = 0; i < rawNodesArray.length; i++) {
+        if(!!rawNodesArray[i].name && !!rawNodesArray[i].neighbours) {
+            result.push(new Node(rawNodesArray[i].name, rawNodesArray[i].neighbours));
+        }
+    }
+    return result;
 }
 
 module.exports = Node;

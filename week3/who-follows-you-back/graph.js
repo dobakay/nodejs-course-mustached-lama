@@ -7,9 +7,19 @@ function DirectedGraphException (message) {
     this.type = 'DirectedGraphException';
 }
 
-function DirectedGraph () {
+function DirectedGraph (nodeList) {
     this._nodes = {};
-    this._edges = {};
+
+    if(!!nodeList) {
+        for (var i = 0; i < nodeList.length; i++) {
+            if(nodeList[i] instanceof Node) {
+                this._nodes[nodeList[i].getName()] = nodeList[i];
+            }
+            else {
+                throw new DirectedGraphException('Object in nodeList is not a Node instance.');
+            }
+        }
+    }
 }
 
 
@@ -24,13 +34,31 @@ DirectedGraph.prototype.getNode = function(nodeName) {
     return this._nodes[nodeName];
 };
 
-DirectedGraph.prototype.addEdge = function(node1, node2) {
+DirectedGraph.prototype.addEdge = function(node1Name, node2Name) {
+    var newNode = null;
+    if(!this._nodes[node1Name]) {
+        newNode = new Node(node1Name,[]);
+        this.addNode(newNode);
+    }
+    if(!this._nodes[node2Name]) {
+        newNode = new Node(node2Name,[]);
+        this.addNode(newNode);
+    }
+
+    if(this._nodes[node1Name].getNeighbours().indexOf(node2Name) === -1) {
+        this._nodes[node1Name].addNeighbour(node2Name);
+    }
 
 };
 
-DirectedGraph.prototype.getEdge = function() {
-    // body..
+DirectedGraph.prototype.getNeighboursFor = function(nodeName) {
+    if(!this._nodes[nodeName]) {
+        throw new DirectedGraphException('There is no node with name "' + nodeName + '".');
+    }
+
+    return this._nodes[nodeName].getNeighbours();
 };
+
 module.exports = DirectedGraph;
 
 

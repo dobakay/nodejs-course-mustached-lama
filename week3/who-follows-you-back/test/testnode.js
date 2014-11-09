@@ -12,10 +12,10 @@ describe('dummy test', function () {
 
 describe('Node', function () {
 
-    describe('new Node()', function () {
+    describe('new Node(name, neighbours)', function () {
         it('should create a new node object', function () {
             var node = new Node();
-            expect(node instanceof Node).to.equal(true);
+            expect(node instanceof Node).to.be.true;
         });
 
         it('should contain emty fields if no parameters are given to constructor', function () {
@@ -48,7 +48,7 @@ describe('Node', function () {
 
     });
 
-    describe('setName()', function () {
+    describe('setName(name)', function () {
 
         it('should set a new name for the node', function () {
             var node = new Node();
@@ -64,7 +64,7 @@ describe('Node', function () {
 
     });
 
-    describe('addNeighbour()', function () {
+    describe('addNeighbour(neighbourName)', function () {
 
         it('should add a new neighbour name to current neighbours', function () {
             var sampleName = 'test';
@@ -84,7 +84,7 @@ describe('Node', function () {
 
     });
 
-    describe('removeNeighbour()', function () {
+    describe('removeNeighbour(neighbourName)', function () {
 
         it('should remove a neighbourName from neighbours list', function () {
             var sampleName = 'test';
@@ -107,6 +107,22 @@ describe('Node', function () {
             var sampleNeighbours = ['test1', 'test2'];
             var node = new Node(sampleName, sampleNeighbours);
             expect(node.removeNeighbour.bind(node,'test3')).to.throw('Neighbour name does not exists.');
+        });
+    });
+
+    describe('createNodes(rawNodeObjects)', function () {
+        it('should create an array of Node objects by given rawNodes', function () {
+            var rawNodes = [{
+                name: 'test1',
+                neighbours: ['test2', 'test3']
+            }, {
+                name: 'test2',
+                neighbours: ['test1']
+            }];
+            var resultNodes = Node.createNodes(rawNodes);
+            for (var i = 0; i < resultNodes.length; i++) {
+                expect(resultNodes[i] instanceof Node).to.be.true;
+            };
         });
     });
 });
