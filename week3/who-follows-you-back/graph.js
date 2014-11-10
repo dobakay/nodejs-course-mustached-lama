@@ -59,6 +59,70 @@ DirectedGraph.prototype.getNeighboursFor = function(nodeName) {
     return this._nodes[nodeName].getNeighbours();
 };
 
+DirectedGraph.prototype.pathBetween = function(nodeA, nodeB) {
+    var nodeAName = null;
+    var nodeBName = null;
+
+    if(nodeA instanceof Node) {
+        nodeAName = nodeA.getName();
+    }
+    else {
+        nodeAName = nodeA;
+    }
+
+    if(nodeB instanceof Node) {
+        nodeBName = nodeB.getName();
+    }
+    else {
+        nodeBName = nodeB;
+    }
+
+    var result = search.call( this, nodeAName, nodeBName);
+
+    return result;
+};
+
+function search (nodeA, nodeB) {
+    if( nodeA === nodeB ) {
+        return true;
+    }
+
+    var visited = [];
+    var queue = [];
+    var nodeName = null;
+    var neighbours = null;
+
+    queue.push(nodeA);
+
+     while (queue.length !== 0) {
+        nodeName = queue.shift();
+        neighbours = this._nodes[nodeName].getNeighbours();
+
+        for (var i = 0; i < neighbours.length; i++) {
+            if (neighbours[i] === nodeB) {
+                return true;
+            }
+
+            if(visited.indexOf(neighbours[i]) === -1) {
+                visited.push(neighbours[i]);
+                queue.push(neighbours[i]);
+            }
+        }
+    }
+
+    return false;
+}
+
+DirectedGraph.prototype.toString = function() {
+    var resultStr = '';
+
+    for (var key in this._nodes) {
+        resultStr += this._nodes[key].getName() + '->[' + this._nodes[key].getNeighbours().toString() + '];';
+    }
+
+    return resultStr;
+};
+
 module.exports = DirectedGraph;
 
 

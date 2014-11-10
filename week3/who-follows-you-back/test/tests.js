@@ -24,6 +24,28 @@ function generateDirectedGraphWithNodes () {
     return new DirectedGraph(nodeList);
 }
 
+function generateDirectedGraphWithNodesAndPaths () {
+    var rawNodes = [{
+            name: 'test1',
+            neighbours: ['test2', 'test3']
+        }, {
+            name: 'test2',
+            neighbours: ['test1']
+        }, {
+            name: 'test3',
+            neighbours: ['test4']
+        }, {
+            name: 'test4',
+            neighbours: []
+        }, {
+            name: 'test5',
+            neighbours: []
+        }];
+
+    var nodeList = Node.createNodes(rawNodes);
+    return new DirectedGraph(nodeList);
+}
+
 ///////////
 // Tests //
 ///////////
@@ -147,15 +169,36 @@ describe('DirectedGraph', function () {
 
 
     describe('pathBetween(nodeA, nodeB)', function () {
-        it('should return true if there is a path between the two nodes');
+        it('should return true if there is a path between the two nodes', function () {
+            var graph = generateDirectedGraphWithNodesAndPaths();
 
-        it('should return false if there is not a path between the two nodes');
+            var isPathPresent = graph.pathBetween('test1', 'test4');
+            expect(isPathPresent).to.be.true;
+        });
 
-        it('should return false if one of the nodes does not exist in the graph');
+        it('should return false if there is not a path between the two nodes', function () {
+            var graph = generateDirectedGraphWithNodesAndPaths();
+
+            var isPathPresent = graph.pathBetween('test1', 'test5');
+            expect(isPathPresent).to.be.false;
+        });
+
+        it('should return false if one of the nodes does not exist in the graph', function () {
+            var graph = generateDirectedGraphWithNodesAndPaths();
+
+            var isPathPresent = graph.pathBetween('test1', 'test6');
+            expect(isPathPresent).to.be.false;
+        });
     });
 
 
     describe('toString()', function () {
-        it('should print out nodes names and a list of their neighbouring Nodes names');
+        it('should print out nodes names and a list of their neighbouring Nodes names', function () {
+            var graph = generateDirectedGraphWithNodes();
+            var expectedString = 'test1->[test2,test3];test2->[test1];test3->[];';
+            var actualString = graph.toString();
+
+            expect(actualString).to.equal(expectedString);
+        });
     })
 });
