@@ -36,3 +36,4 @@ app.post('/map', function (request, response) {
     response.end();
 });
 
+app.listen(8000);
