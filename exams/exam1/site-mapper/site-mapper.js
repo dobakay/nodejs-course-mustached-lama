@@ -24,19 +24,30 @@ var mapper = (function() {
 
         var queue = [url];
         var visitedUrls = [];
-        var counter = 1;
-        var nextUrl = null;
-        while( queue.length > 0 && counter < 500) {
-            nextUrl = queue.shift();
-            visitedUrls.push(nextUrl);
-            crawl(url, nextUrl, visitedUrls)
-                .then(function (filteredUrls) {
-                    console.log(filteredUrls);
-                    queue = queue.concat(filteredUrls);
-                    counter++;
-                });
-        }
+        asyncLoop(url, queue, visitedUrls, 0, 500, iteration, function done() {
+            console.log('done done');
+        });
+        // generateMap
         return mapId;
+    }
+
+    function asyncLoop (base, queue, visitedUrls, currentIndex, endIndex, iterationCallback, doneCallback) {
+        if(currentIndex === endIndex || queue.length === 0) {
+            return doneCallback();
+        }
+        iterationCallback(base, queue, visitedUrls, function nextIteration() {
+            asyncLoop(base, queue, visitedUrls, ++currentIndex, endIndex, iterationCallback, doneCallback);
+        });
+    }
+
+    function iteration (base, queue, visitedUrls, callback) {
+        var nextUrl = queue.shift();
+        visitedUrls.push(nextUrl);
+            crawl(base, nextUrl, visitedUrls)
+                .then(function (filteredUrls) {
+                    queue = queue.concat(filteredUrls);
+                    callback();
+                });
     }
 
     function crawl (base, url, visitedUrls) {
