@@ -1,3 +1,4 @@
+'use strict';
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
@@ -11,16 +12,11 @@ db.once('open', function callback () {
         personName: String
     });
 
-    var Contact = db.model('contacts', ContactSchema);
-
     var GroupSchema = new Schema({
         groupName: String,
-        contacts: [{ type: Mongoose.Schema.ObjectId, ref : 'contacts'}]
+        contacts: [{ type: Schema.ObjectId, ref : 'contacts'}]
     });
-
-    var Group = db.model('groups', GroupSchema);
-
+    module.exports.Contact = db.model('contacts', ContactSchema);
+    module.exports.Group = db.model('groups', GroupSchema);
 });
 
-
-module.export
