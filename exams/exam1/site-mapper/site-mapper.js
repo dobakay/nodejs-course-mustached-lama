@@ -24,30 +24,32 @@ var mapper = (function() {
 
         var queue = [url];
         var visitedUrls = [];
-        asyncLoop(url, queue, visitedUrls, 0, 500, iteration, function done() {
+        asyncLoop(url, queue, visitedUrls, 0, 4, {}, iteration, function done(finalMap) {
+            console.log(finalMap);
             console.log('done done');
         });
         // generateMap
         return mapId;
     }
 
-    function asyncLoop (base, queue, visitedUrls, currentIndex, endIndex, iterationCallback, doneCallback) {
+    function asyncLoop (base, queue, visitedUrls, currentIndex, endIndex, map, iterationCallback, doneCallback) {
         if(currentIndex === endIndex || queue.length === 0) {
-            return doneCallback();
+            return doneCallback(map);
         }
-        iterationCallback(base, queue, visitedUrls, function nextIteration() {
-            asyncLoop(base, queue, visitedUrls, ++currentIndex, endIndex, iterationCallback, doneCallback);
+        iterationCallback(base, queue, visitedUrls, map, function nextIteration(base, queue, map, visitedUrls) {
+            asyncLoop(base, queue, visitedUrls, ++currentIndex, endIndex, map, iterationCallback, doneCallback);
         });
     }
 
-    function iteration (base, queue, visitedUrls, callback) {
+    function iteration (base, queue, visitedUrls, map, callback) {
         var nextUrl = queue.shift();
         visitedUrls.push(nextUrl);
-            crawl(base, nextUrl, visitedUrls)
-                .then(function (filteredUrls) {
-                    queue = queue.concat(filteredUrls);
-                    callback();
-                });
+        crawl(base, nextUrl, visitedUrls)
+            .then(function (filteredUrls) {
+                queue = queue.concat(filteredUrls);
+                map[nextUrl] = filteredUrls;
+                callback(base, queue, map, visitedUrls);
+            });
     }
 
     function crawl (base, url, visitedUrls) {
