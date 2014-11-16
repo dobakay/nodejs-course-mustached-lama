@@ -11,17 +11,9 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.get('/sitemap', function (request, response) {
     var mapId = request.body.url;
 
-    mapper.getSiteMap(mapId, function(id, siteMap) {
-        if(id === null) {
-            response.json(siteMap);
-            response.end();
-        }
-        else {
-            response.json({
-                mappedSiteId: id
-            });
-            response.end();
-        }
+    mapper.getSiteMap(mapId, function(siteMap) {
+        response.json(siteMap);
+        response.end();
     });
 });
 

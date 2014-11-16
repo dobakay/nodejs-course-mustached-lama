@@ -6,17 +6,12 @@ var localStorage = (function() {
     var localStorage = {};
     var maps = null;
 
-    localStorage.loadFromLocal = function () {
-        maps = storage.getItem('maps');
-
-        if(!maps) {
-            maps = {}
-        }
-
-    }
-
     localStorage.storeInLocal = function (key, object) {
         storage.setItem(key, object);
+    }
+
+    localStorage.getFromLocal = function (key) {
+        return storage.getItem(key);
     }
 
     localStorage.init = function () {
@@ -30,8 +25,6 @@ var localStorage = (function() {
             continuous: true,
             interval: false
         });
-        localStorage.loadFromLocal();
-        localStorage.maps = maps;
     };
 
     localStorage.init();

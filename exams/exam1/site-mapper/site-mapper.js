@@ -10,25 +10,29 @@ var mapper = (function() {
     var siteMapper = {};
 
     siteMapper.getSiteMap = function (id, callback ) {
-
+        var map = localStorage.getFromLocal(id);
+        callback(map);
     }
 
     siteMapper.map = function (url) {
         var mapId = generatekey.generateKey();
         // TODO: add parsing with robots module
-        // TODO: save in node-persist object with content "siteMap still building"
-
-        // TODO:
-        // give the a-tags to a site-mapper function
-        // store the site-map from the previous func in localStorage
 
         var queue = [url];
+        var map = {
+            "id": mapId,
+            "status": "building",
+            "sitemap": {}
+        };
         var visitedUrls = [];
-        asyncLoop(url, queue, visitedUrls, 0, 4, {}, iteration, function done(finalMap) {
-            console.log(finalMap);
-            console.log('done done');
+        localStorage.storeInLocal(mapId, map);
+        asyncLoop(url, queue, visitedUrls, 0, 4, map, iteration, function done(finalMap) {
+            map.status = "done";
+            map.sitemap = finalMap;
+            localStorage.storeInLocal(mapId, map);
+            // console.log('done done');
         });
-        // generateMap
+
         return mapId;
     }
 
@@ -47,7 +51,7 @@ var mapper = (function() {
         crawl(base, nextUrl, visitedUrls)
             .then(function (filteredUrls) {
                 queue = queue.concat(filteredUrls);
-                map[nextUrl] = filteredUrls;
+                map.sitemap[nextUrl] = filteredUrls;
                 callback(base, queue, map, visitedUrls);
             });
     }
