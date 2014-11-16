@@ -10,6 +10,9 @@ var mapper = (function() {
 
     var siteMapper = {};
 
+    var _startCrawlingIterrationIndex = 0;
+    var _crawledPagesCount = 4;
+
     siteMapper.getSiteMap = function (id, callback ) {
         var map = localStorage.getFromLocal(id);
         callback(map);
@@ -28,7 +31,7 @@ var mapper = (function() {
                 };
                 var visitedUrls = [];
                 localStorage.storeInLocal(mapId, map);
-                asyncLoop(url, queue, visitedUrls, 0, 4, map, iteration, function done(finalMap) {
+                asyncLoop(url, queue, visitedUrls, _startCrawlingIterrationIndex, _crawledPagesCount, map, iteration, function done(finalMap) {
                     map.status = "done";
                     map.sitemap = finalMap;
                     console.log('done done');
