@@ -4,6 +4,7 @@ var mapper = (function() {
     var generatekey = require('generate-key');
     var htmlgetter = require('./html-getter');
     var parser = require('./parser');
+    var robots = require('./robots');
     var mapBuilder = require('./map-builder');
     var Q = require('q');
 
@@ -15,25 +16,27 @@ var mapper = (function() {
     }
 
     siteMapper.map = function (url) {
-        var mapId = generatekey.generateKey();
-        // TODO: add parsing with robots module
+        robots.init(url)
+            .then(function () {
+                var mapId = generatekey.generateKey();
 
-        var queue = [url];
-        var map = {
-            "id": mapId,
-            "status": "building",
-            "sitemap": {}
-        };
-        var visitedUrls = [];
-        localStorage.storeInLocal(mapId, map);
-        asyncLoop(url, queue, visitedUrls, 0, 4, map, iteration, function done(finalMap) {
-            map.status = "done";
-            map.sitemap = finalMap;
-            localStorage.storeInLocal(mapId, map);
-            // console.log('done done');
-        });
+                var queue = [url];
+                var map = {
+                    "id": mapId,
+                    "status": "building",
+                    "sitemap": {}
+                };
+                var visitedUrls = [];
+                localStorage.storeInLocal(mapId, map);
+                asyncLoop(url, queue, visitedUrls, 0, 4, map, iteration, function done(finalMap) {
+                    map.status = "done";
+                    map.sitemap = finalMap;
+                    console.log('done done');
+                    localStorage.storeInLocal(mapId, map);
+                });
+                return mapId;
+            });
 
-        return mapId;
     }
 
     function asyncLoop (base, queue, visitedUrls, currentIndex, endIndex, map, iterationCallback, doneCallback) {
@@ -47,13 +50,20 @@ var mapper = (function() {
 
     function iteration (base, queue, visitedUrls, map, callback) {
         var nextUrl = queue.shift();
-        visitedUrls.push(nextUrl);
-        crawl(base, nextUrl, visitedUrls)
-            .then(function (filteredUrls) {
-                queue = queue.concat(filteredUrls);
-                map.sitemap[nextUrl] = filteredUrls;
-                callback(base, queue, map, visitedUrls);
-            });
+        robots.checkUrl(nextUrl, function(accessGranted) {
+            if(accessGranted) {
+                visitedUrls.push(nextUrl);
+                crawl(base, nextUrl, visitedUrls)
+                    .then(function (filteredUrls) {
+                        queue = queue.concat(filteredUrls);
+                        map.sitemap[nextUrl] = filteredUrls;
+                        callback(base, queue, map, visitedUrls);
+                    });
+            }
+            else {
+                console.log('Can not access url:' + nextUrl);
+            }
+        });
     }
 
     function crawl (base, url, visitedUrls) {
