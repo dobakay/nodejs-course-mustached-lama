@@ -19,9 +19,9 @@ var mapper = (function() {
     }
 
     siteMapper.map = function (url) {
+        var mapId = generatekey.generateKey();
         robots.init(url)
             .then(function () {
-                var mapId = generatekey.generateKey();
 
                 var queue = [url];
                 var map = {
@@ -37,9 +37,9 @@ var mapper = (function() {
                     console.log('done done');
                     localStorage.storeInLocal(mapId, map);
                 });
-                return mapId;
             });
 
+        return mapId;
     }
 
     function asyncLoop (base, queue, visitedUrls, currentIndex, endIndex, map, iterationCallback, doneCallback) {

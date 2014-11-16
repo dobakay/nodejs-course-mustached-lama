@@ -20,12 +20,12 @@ app.get('/sitemap', function (request, response) {
 app.post('/map', function (request, response) {
     var url = request.body.url;
 
-    var mappedId = mapper.map(url);
-
+    var id = mapper.map(url);
     response.json({
-        mappedSiteId: mappedId
+        mappedSiteId: id
     });
     response.end();
+
 });
 
 app.listen(8000);
