@@ -9,6 +9,7 @@ var mapper = (function() {
     var Q = require('q');
 
     var siteMapper = {};
+    var previousRequests = {};
 
     var _startCrawlingIterrationIndex = 0;
     var _crawledPagesCount = 4;
@@ -19,27 +20,33 @@ var mapper = (function() {
     }
 
     siteMapper.map = function (url) {
-        var mapId = generatekey.generateKey();
-        robots.init(url)
-            .then(function () {
-
-                var queue = [url];
-                var map = {
-                    "id": mapId,
-                    "status": "building",
-                    "sitemap": {}
-                };
-                var visitedUrls = [];
-                localStorage.storeInLocal(mapId, map);
-                asyncLoop(url, queue, visitedUrls, _startCrawlingIterrationIndex, _crawledPagesCount, map, iteration, function done(finalMap) {
-                    map.status = "done";
-                    map.sitemap = finalMap;
-                    console.log('done done');
+        if(previousRequests[url] !== undefined) {
+            return previousRequests[url]; // returns the mapId (if map was previously generated)
+        }
+        else {
+            var mapId = generatekey.generateKey();
+            robots.init(url)
+                .then(function () {
+                    previousRequests[url] = mapId; // storing in map history
+                    var queue = [url];
+                    var map = {
+                        "id": mapId,
+                        "status": "building",
+                        "sitemap": {}
+                    };
+                    var visitedUrls = [];
                     localStorage.storeInLocal(mapId, map);
+                    asyncLoop(url, queue, visitedUrls, _startCrawlingIterrationIndex, _crawledPagesCount, map, iteration, function done(finalMap) {
+                        map.status = "done";
+                        map.sitemap = finalMap;
+                        console.log('done done');
+                        localStorage.storeInLocal(mapId, map);
+                    });
                 });
-            });
 
-        return mapId;
+            return mapId;
+        }
+
     }
 
     function asyncLoop (base, queue, visitedUrls, currentIndex, endIndex, map, iterationCallback, doneCallback) {
