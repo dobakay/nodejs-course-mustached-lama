@@ -87,3 +87,6 @@ RegExStream.prototype._flush = function(done) {
 
     done();
 };
+
+
+module.exports = RegExStream;
