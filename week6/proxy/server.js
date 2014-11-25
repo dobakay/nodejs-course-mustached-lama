@@ -1,14 +1,11 @@
 var http = require('http');
-var url = require('url');
 
-var server = http.http.createServer(function (clientReq, clientReq) {
-    var urlParts = url.parse(clientReq.url);
+var server = http.createServer(function (clientReq, clientReq) {
     var options = {
         host: 'google.com',
         port: 80,
-        path: urlParts.pathname,
-        method: clientReq.method,
-        headers: clientReq.headers
+        path: clientReq.url,
+        method: 'GET'
     };
 
     var proxy = http.request(options, function (serverRes) {
