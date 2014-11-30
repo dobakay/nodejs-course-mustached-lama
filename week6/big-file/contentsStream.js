@@ -36,7 +36,12 @@ ContentStream.prototype.generateChunk = function (numbersCount) {
     var numbersCount = numbersCount || this.numbersPerChunk;
 
     for (var i = 0; i < numbersCount; i++) {
-        chunk += '' + numberGenerator(1,10) + ',';
+        if(i < numbersCount - 1) {
+            chunk += '' + numberGenerator(1,10) + ',';
+        }
+        else {
+            chunk += '' + numberGenerator(1,10);
+        }
     }
 
     return chunk;
